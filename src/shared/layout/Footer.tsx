@@ -1,0 +1,13 @@
+const Footer = () => {
+    const currentYear: number = new Date().getFullYear();
+
+    return (
+        <footer className = "bg-cf-dark-gray text-white">
+            <div className = "container mx-auto py-8 text-center text-sm text-gray-400"> &copy;
+                {currentYear} Beauty Salon. All rights reserved.
+            </div>
+        </footer>
+    );
+};
+
+export default Footer;
