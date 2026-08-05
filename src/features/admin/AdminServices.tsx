@@ -67,9 +67,67 @@ export const AdminServices = () => {
                                 <option key={cat.id} value={cat.id}>{cat.name}</option>
                                 ))}
                         </select>
+                        <input
+                            type="text"
+                            placeholder="Όνομα"
+                            value={newService.name}
+                            onChange={(e) => setNewService({...newService, name:e.target.value})}
+                            className="border rounded-lg px-3 py-2"
+                            />
+                        <input
+                            type="number"
+                            placeholder="Τιμή (€)"
+                            value={newService.price || ''}
+                            onChange={(e) => setNewService({...newService, price: parseFloat(e.target.value)})}
+                            className="border rounded-lg px-3 py-2"
+                            />
                     </div>
-            )}
+                    <div className="flex gap-2 mt-3">
+                        <button onClick={handleAdd} className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600">Προσθήκη</button>
+                        <button onClick={() => setShowNewService(false)} className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300">Ακύρωση</button>
+
+                    </div>
+                </div>
+            ) }
+
+            {categories.map((category) => (
+                <div key={category.id} className="bg-white rounded-xl shadow-sm border border-gray-100 mb-4 overflow-hidden">
+                    <div className="px-6 py-4 bg-gray-50 border-b border-gray-100">
+                        <h2 className="text-lg font-semibold text-gray-700">{category.name}</h2>
+                    </div>
+                    <div className="divide-y divide-gray-50">{category.services?.map((service) => (
+                        <div key={service.id} className="felx items-center justify-between px-6 py-3 hover:bg-gray-50">
+                            {editingService?.id !== service.id ? (
+                                <>
+                                <div>
+                                   <span className="font-medium text-gray-700">{service.name}</span>
+                                   <span className="ml-3 text-sm text-pink-400 font-semibold">{service.price}€</span>
+                                </div>
+
+                                <div className="flex gap-2">
+                                  <button onClick={() => setEditingService(service)} className="text-gray-400 hover:text-blue-500"><Edit size={18} /> </button>
+                                    <button onClick={() => handleDelete(service.id)} className="text-gray-400 hover:text-red-500"><Trash2 size={18} /> </button>
+                                </div>
+                                </>
+
+                            ) : (
+                                <div className="flex items-center gap-3 w-full">
+                                    <input type="text" value={editingService.name} onChange={(e) => setEditingService({...editingService, name: e.target.value})}
+                                           className="flex-1 border rounded-lg px-3 py-1"/>
+                                    <input type="number" value={editingService.price} onChange={(e) => setEditingService({...editingService, price: parseFloat(e.target.value) })}
+                                           className="w-24 border rounded-lg px-3 py-1"/>
+                                    <button onClick={() => handleUpdate(editingService)}
+                                            className="text-green-500 hover:text-green-700"><Save size={18} /> </button>
+                                    <button onClick={() => setEditingService(null)}
+                                            className="text-gray-400 hover:text-gray-600"><X size={18} /> </button>
+                                </div>
+                            )}
+                        </div>
+                    ))}
+                    </div>
+                </div>
+            ))}
         </div>
 
-    )
-}
+    );
+};
