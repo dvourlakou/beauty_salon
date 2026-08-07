@@ -52,8 +52,8 @@ const RegisterPage = () => {
     };
 
     return (
-        <div className="min-h-screen flex flex-col items-center justify--center px-4 bg-white">
-            <h1 className="text-4x1 md:text-5x1 font-bold text-pink-300 tracking-wider mb-10">
+        <div className="min-h-screen flex flex-col items-center justify-center px-4 bg-white">
+            <h1 className="text-4xl md:text-5xl font-bold text-pink-300 tracking-wider mb-10">
                 Beauty Salon
             </h1>
 

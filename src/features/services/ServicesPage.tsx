@@ -35,9 +35,9 @@ export const ServicesPage = () => {
 
     return (
         <div className="min-h-screen bg-gray-50 px-4 py-6">
-            <div className="max-w-4x1 mx-auto">{/* Page Header */}
+            <div className="max-w-4xl mx-auto">{/* Page Header */}
                 <div className="mb-8">
-                    <h1 className="text-3x1 font-bold text-gray-800">Οι Υπηρεσίες μας</h1>
+                    <h1 className="text-3xl font-bold text-gray-800">Οι Υπηρεσίες μας</h1>
                     <p className="text-gray-500 mt-1">Επιλέξτε την υπηρεσία που επιθυμείτε</p>
                 </div>
 

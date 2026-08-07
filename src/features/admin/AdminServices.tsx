@@ -45,7 +45,7 @@ export const AdminServices = () => {
     return (
         <div>
             <div className="flex items-center justify-between mb-6">
-                <h1 className="text-2xl font-bold text-gary-800">Διαχείριση Υπηρεσιών</h1>
+                <h1 className="text-2xl font-bold text-gray-800">Διαχείριση Υπηρεσιών</h1>
                 <button
                     onClick={()=> setShowNewService(true)}
                     className="flex items-center gap-2 px-4 py-2 bg-pink-300 text-white rounded-lg hover:bg-pink-400">
@@ -54,7 +54,7 @@ export const AdminServices = () => {
             </div>
 
             {showNewService && (
-                <div className="bg-white rounded-xl shadow-sm border border-grey-100 p-4 mb-6">
+                <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 mb-6">
                     <h3 className="font-semibold text-gray-700 mb-3">Προσθήκη Νέας Υπηρεσίας</h3>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                         <select
@@ -96,7 +96,7 @@ export const AdminServices = () => {
                         <h2 className="text-lg font-semibold text-gray-700">{category.name}</h2>
                     </div>
                     <div className="divide-y divide-gray-50">{category.services?.map((service) => (
-                        <div key={service.id} className="felx items-center justify-between px-6 py-3 hover:bg-gray-50">
+                        <div key={service.id} className="flex items-center justify-between px-6 py-3 hover:bg-gray-50">
                             {editingService?.id !== service.id ? (
                                 <>
                                 <div>

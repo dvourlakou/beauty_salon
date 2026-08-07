@@ -141,8 +141,8 @@ export const BookingPage = () => {
     }
 
     return (
-        <div className="min-h-screen bg-gary-50 px-4 py-6">
-            <div className="max-w-2x1 mx-auto">
+        <div className="min-h-screen bg-gray-50 px-4 py-6">
+            <div className="max-w-2xl mx-auto">
 
                 {/* page header */}
                   <div className="flex items-center gap-3 mb-6">
@@ -151,11 +151,11 @@ export const BookingPage = () => {
                         className="text-gray-500 hover:text-pink-400 transition-colors">
                         Πίσω
                     </button>
-                    <h1 className="text-2x1 font-bold text-gray-800">Κράτηση Ραντεβού</h1>
+                    <h1 className="text-2xl font-bold text-gray-800">Κράτηση Ραντεβού</h1>
                   </div>
 
                 {/* calendar */}
-                  <div className="bg-white rounded-x1 shadow-sm border border-gray-100 p-6 mb-4">
+                  <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-4">
                     <h2 className="text-lg font-semibold text-gray-700 mb-4">Επιλέξτε Ημερομηνία</h2>
                     <Calendar
                         selectedDate={selectedDate}
@@ -166,7 +166,7 @@ export const BookingPage = () => {
 
                 {/* time slots */}
                 {selectedDate && (
-                  <div className="bg-white rounded-x1 shadow-sm border border-gray-100 p-6 mb-4">
+                  <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-4">
                     <h2 className="text-lg font-semibold text-gray-700 mb-4">Διαθέσιμες Ώρες</h2>
                     <TimeSlots
                             slots={availableSlots}
@@ -178,7 +178,7 @@ export const BookingPage = () => {
 
                 {/* choose employee */}
                 {employees.length > 0 && (
-                    <div className="bg-white rounded-x1 shadow-sm border border-gray-100 p-6 mb-4">
+                    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-4">
                         <h2 className="text-lg font-semibold text-gray-700 mb-4">Επιλογή Αισθητικού</h2>
                         <SelectEmployee
                             employees={employees}
@@ -189,7 +189,7 @@ export const BookingPage = () => {
                 )}
 
                 {/* booking summary */}
-                <div className="bg-white rounded-x1 shadow-sm border border-gray-100 p-6 mb-4">
+                <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-4">
                     <BookingSummary
                         service={service}
                         date={selectedDate}

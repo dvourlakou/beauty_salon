@@ -38,7 +38,7 @@ export const mockCategories: ServiceCategory[] = [
         description: 'Μασάζ χαλάρωσης και ευεξίας',
         services: [
             { id:16, name: 'Full Body 60λεπτά', price: 28,durationMinutes: 60, categoryId: 3, isActive: true },
-            { id:17, name: 'Full Body 45λεπτά', price: 25,durationMinutes:45, categoryId: , isActive: true },
+            { id:17, name: 'Full Body 45λεπτά', price: 25,durationMinutes:45, categoryId: 3, isActive: true },
             { id:18, name: 'Πλάτη', price: 15, durationMinutes: 30, categoryId: 3, isActive: true },
             { id:19, name: 'Κεφάλι', price: 18, durationMinutes:30, categoryId: 3, isActive: true },
             { id:20, name: 'Πόδια', price: 20, durationMinutes:30, categoryId: 3, isActive: true },

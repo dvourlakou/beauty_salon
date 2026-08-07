@@ -18,7 +18,7 @@ export const EmployeeWorkload = ({ workload }: EmployeeWorkloadProps) => {
 
                     return (
                         <div key={employee.id}>
-                            <div className="flex justify-betwee text-sm mb-1">
+                            <div className="flex justify-between text-sm mb-1">
                                 <span className="text-gray-700">{employee.name}
                                 </span>
                                 <span className="text-gray-400">{employee.total} / {employee.capacity}

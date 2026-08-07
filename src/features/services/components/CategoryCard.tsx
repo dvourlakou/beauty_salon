@@ -26,18 +26,18 @@ export const CategoryCard = ({ category, onSelectService }: CategoryCard) => {
     };
 
     return (
-        <div className="bg-white rounded -x1 shadow-sm border border-gray-100 overflow-hidden transition-all duration-300">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden transition-all duration-300">
             {/* Category Header  - clickable to expand-collapse */}
             <button
                 onClick={toggleExpand}
                 className="w-full flex items-center justify-between px-6 py-4 hover:bg-gray-50 transition-colors">
                 <div className="flex items-center gap-3">
-                    <span className="text-3x1">{getCategoryIcon(category.name)}</span>
-                    <h2 className="text-x1 font-semibold text-gary-800">{category.name}</h2>
+                    <span className="text-3xl">{getCategoryIcon(category.name)}</span>
+                    <h2 className="text-xl font-semibold text-gray-800">{category.name}</h2>
                     <span className="text-sm text-gray-400 bg-gray-100 px-2 py-1 rounded-full">{category.services?.length || 0} υπηρεσίες </span>
                 </div>
                 {isExpanded ? (
-                    <ChevronUp className="text-gary-400" size={24} /> ) : (
+                    <ChevronUp className="text-gray-400" size={24} /> ) : (
                         <ChevronDown className="text-gray-400" size={24} />
 
                 )}

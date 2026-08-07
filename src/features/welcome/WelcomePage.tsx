@@ -6,13 +6,13 @@ const WelcomePage =() => {
     return (
         <div className="min-h-screen flex flex-col items-center justify-between px-4 py-12 bg-white">
             <div className="flex-1 flex items-end">
-                <h1 className="text-6x1 md:text-8x1 font-bold text-pink-300 tracking-wider">
+                <h1 className="text-6xl md:text-8xl font-bold text-pink-300 tracking-wider">
                     Beauty Salon
                 </h1>
             </div>
 
             <div className="flex-1 flex items-center">
-                <h2 className="text-2x1 md:text-4x1 font-light text-blue-500 tracking-wide text-center">
+                <h2 className="text-2xl md:text-4xl font-light text-blue-500 tracking-wide text-center">
                     Κέντρο Ομορφιάς και Χαλάρωσης
                 </h2>
             </div>
