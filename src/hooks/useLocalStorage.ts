@@ -4,15 +4,14 @@ export function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T)
     //get from local storage and after that parse
 
     const readValue = (): T => {
-        if (typeof window ==='undefined'){
+        if (typeof window === 'undefined') {
             return initialValue;
         }
 
         try {
             const item = window.localStorage.getItem(key);
-            return item ? (JSON.parse(item) as T): initialValue;
-        }
-        catch (error) {
+            return item ? (JSON.parse(item) as T) : initialValue;
+        } catch (error) {
             console.warn(`Error reading localStorage key "${key}"`, error);
             return initialValue;
         }
@@ -20,7 +19,7 @@ export function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T)
 
     const [storedValue, setStoredValue] = useState<T>(readValue);
 
-    const setValue = (value:T) => {
+    const setValue = (value: T) => {
         if (typeof window === 'undefined') {
             console.warn(`Tried setting localStorage key "${key}" even though environment is not a client`);
         }
@@ -29,17 +28,16 @@ export function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T)
             const newValue = value instanceof Function ? value(storedValue) : value;
             window.localStorage.setItem(key, JSON.stringify(newValue));
             setStoredValue(newValue);
-        }
-        catch (error) {
+        } catch (error) {
             console.warn(`Error setting localStorage key "${key}":`, error);
         }
     };
 
     useEffect(() => {
-        setStoredValue(readValue());
+        const value = readValue();
+        setStoredValue(value);
         //eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
-    },[]);
-
-    return [storedValue, setValue];
+    return [storedValue,setValue];
 }
