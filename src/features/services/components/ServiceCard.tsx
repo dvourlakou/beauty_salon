@@ -1,4 +1,4 @@
-import { Service } from "../types.ts";
+import type {Service }  from '../types';
 
 interface ServiceCardProps {
     service: Service;
