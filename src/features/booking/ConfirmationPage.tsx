@@ -1,6 +1,6 @@
 import { useNavigate, useLocation } from 'react-router';
 import { CheckCircle , Calendar, Clock, User, DollarSign ,Mail} from "lucide-react";
-import {Button} from '../shared/ui/Button';
+import Button from '@/shared/ui/Button';
 
 interface ConfirmationPage {
     serviceName: string;

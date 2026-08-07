@@ -10,12 +10,12 @@ export const appointmentApi = {
         const params = new URLSearchParams({
             serviceId: serviceId.toString(),
             date,
-        };
+        });
 
         if (employeeId) {
             params.append('employeeId',employeeId.toString());
         }
-        const response = await axiosInstance.get<string[]>(`/appontments/slots?${params}`);
+        const response = await axiosInstance.get<string[]>(`/appointments/slots?${params}`);
         return response.data;
     },
 
