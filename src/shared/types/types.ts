@@ -1,3 +1,4 @@
+import  * as React from 'react';
 export  type ButtonProps = {
     onClick?: () => void;
     disabled?: boolean;
@@ -16,7 +17,7 @@ export type IconButtonProps = {
 };
 
 export type LayoutProps = {
-    children: React.React.Node;
+    children: React.ReactNode;
 };
 
 export type InputProps = {

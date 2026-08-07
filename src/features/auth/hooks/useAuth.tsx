@@ -1,6 +1,8 @@
-import { useState, useEffect, createContext , useContext} from "react";
+/* eslint-disable react-refresh/only-export-components */
+import { useState, useEffect, createContext , useContext } from 'react';
+import * as React from 'react';
 import {authApi} from '../../../api/authApi';
-import  type { User, AuthContextType, RegisterData} from "../types.ts";
+import  type { User, AuthContextType, RegisterData} from '../types';
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
@@ -15,7 +17,7 @@ export const AuthProvider = ( { children }: { children: React.ReactNode } ) => {
             try {
                 const token = localStorage.getItem('token');
                 if (token) {
-                    const useData = await authApi.getMe();
+                    const userData = await authApi.getMe();
                     setUser(userData);
                 }
             } catch {

@@ -4,19 +4,19 @@ import type { InputProps } from '../types/types';
 const Input = forwardRef<HTMLInputElement, InputProps>(
     (
         {
-            type = 'text';
+            type = 'text',
             placeholder,
             onChange,
             value,
-            error
-            addClasses = ''
-            requires = false;
-            name
-        }
+            error,
+            addClasses = '',
+            required = false,
+            name,
+        },
         ref
     ) => {
         return (
-            <div className= "w-full">
+            <div className="w-full">
                 <input
                     ref={ref}
                     type={type}
@@ -25,18 +25,13 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
                     name={name}
                     value={value}
                     required={required}
-                    className={`w-full px-4 py-3 text-lg border-2 roundes-lg focus:outline-none focus:border-pink-300 transition-colors ${error ? 
-                                 'border-red-400' : 'border-gray-200'} ${addClasses}`}
+                    className={`w-full px-4 py-3 text-lg border-2 rounded-lg focus:outline-none focus:border-pink-300 transition-colors ${error ?
+                        'border-red-400' : 'border-gray-200'} ${addClasses}`}
                 />
-                {error && <p className="text-red-400 text-sm mt-1">{error}
-
-                          </p>
-                </div>
-
-                    );
-                }
-
-
+                {error && <p className="text-red-400 text-sm mt-1">{error}</p>}
+            </div>
+        );
+    }
 );
 
 Input.displayName = 'Input';

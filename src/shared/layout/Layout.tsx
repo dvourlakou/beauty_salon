@@ -1,8 +1,9 @@
-import Header from '.Header';
+import Header from './Header';
 import  Footer from './Footer';
-import type { LayoutProps } from '../types/types';
+import type { LayoutProps }  from '../types/types';
 
-const Layout = ({children} : LayoutProps => {
+
+const Layout = ({children}: LayoutProps) => {
     return (
         <>
             <Header />

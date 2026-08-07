@@ -1,6 +1,6 @@
 import axiosInstance from './axiosConfig';
 import { ServiceCategory , Service } from '../features/services/types';
-import { Employee } from '../service/booking/types';
+import { Employee } from '../features/booking/types';
 import { DashboardStats, Appointment, EmployeeWorkload } from '../features/admin/types';
 
 export const adminApi = {
@@ -39,7 +39,7 @@ export const adminApi = {
     },
 
     deleteService: async (id: number): Promise<void> => {
-        await axiosInstance.delete(`/admin/services/${id}`;
+        await axiosInstance.delete(`/admin/services/${id}`);
 
     },
 
@@ -61,7 +61,7 @@ export const adminApi = {
     },
 
     deleteEmployee: async (id: number): Promise<void> => {
-        await axiosInstance.delete(`/admin/employees/${id}`;
+        await axiosInstance.delete(`/admin/employees/${id}`);
 
     },
 

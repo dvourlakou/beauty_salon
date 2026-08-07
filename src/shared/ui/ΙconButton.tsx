@@ -13,8 +13,8 @@ const IconButton =( {
             type={type}
             onClick={onClick}
             disabled={disabled}
-            className={`opacity-90 hover:opacity-100 cursor-pointer
-              transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed ${addClasses}`}
+            className={`hover:opacity-100 
+              transition-all duration-300 disabled:opacity-50 ${addClasses}`}
 
         >
             {icon}

@@ -1,6 +1,7 @@
 import {Navigate} from 'react-router';
-import {useAuth} from '../../features/auth/hooks/useAuth.tsx';
-import {LoadingSpinner} from '../UI/LoadingSpinner';
+import * as React from 'react';
+import {useAuth} from '../../features/auth';
+import LoadingSpinner from '../ui/LoadingSpinner';
 
 interface ProtectedRouteProps {
     children: React.ReactNode;
@@ -20,7 +21,13 @@ export const ProtectedRoute = ({ children, roles}: ProtectedRouteProps) => {
     }
 
     if (!user){
-        return <Navigate to = "/services" replace />
+        return <Navigate to = "/login" replace />;
+    }
+
+    //αν υπάρχουν roles όμως ο User δεν εχει κανένα απο αυτούς
+
+    if (roles && roles.length >0 && !roles.includes(user.role)) {
+        return <Navigate to = "/services" replace />;
     }
 
     return children;
