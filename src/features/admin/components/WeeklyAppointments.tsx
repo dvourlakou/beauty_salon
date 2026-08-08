@@ -1,4 +1,4 @@
-import { Appointment } from  '../types.ts';
+import type { Appointment } from  '../types.ts';
 
 interface WeeklyAppointmentsProps {
     appointments: Appointment[];

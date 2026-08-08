@@ -41,8 +41,8 @@ const router = createBrowserRouter([
 
         children:[
             {index : true, element: <AdminDashboard />},
-            {path: '/services', element: <AdminServices />},
-            {path:'/employee', element: <AdminEmployees />}
+            {path: 'services', element: <AdminServices />},
+            {path:'employee', element: <AdminEmployees />}
 
         ]
     }

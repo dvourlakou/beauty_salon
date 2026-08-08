@@ -1,7 +1,7 @@
 import {useState} from 'react';
 import {Plus, Edit, Trash2, Save, X} from 'lucide-react';
-import {mockCategories} from '../services/mockData.ts';
-import {Service, ServiceCategory} from '../services/types.ts';
+import {mockCategories} from '../services';
+import type {Service, ServiceCategory} from '../services';
 import toast from 'react-hot-toast';
 
 export const AdminServices = () => {

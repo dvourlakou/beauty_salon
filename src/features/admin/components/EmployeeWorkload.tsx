@@ -1,11 +1,10 @@
-import { EmployeeWorkload as WorkloadType } from '../types.ts';
+import type { EmployeeWorkload as WorkloadType } from '../types.ts';
 
 interface EmployeeWorkloadProps {
     workload: WorkloadType[];
 }
 
-export const EmployeeWorkload = ({ workload }: EmployeeWorkloadProps) => {
-    const maxAppointments = Math.max(...workload.map(w => w.total),1);
+export const EmployeeWorkload = ({workload} : EmployeeWorkloadProps) => {
 
     return (
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">

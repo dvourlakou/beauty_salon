@@ -1,5 +1,5 @@
 import {useState} from 'react';
-import { Plus, Edit, Trash2, X} from 'lucide-react';
+import { Plus, Edit, Trash2, Save, X} from 'lucide-react';
 import toast from 'react-hot-toast';
 
 interface Employee {
@@ -94,7 +94,7 @@ export const AdminEmployees = () => {
                 </div>
             )}
 
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 divide-y divide-gray-50">
+            <div className="bg-white rounded-xl shadow-sm border border-gray-100 divide-y">
                 {employees.map((employee) => (
                     <div key={employee.id} className="flex items-center justify-between px-6 py-4 hover:bg-gray-50">
                         {editingEmployee?.id !== employee.id ? (

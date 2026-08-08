@@ -2,8 +2,8 @@ import {useState, useEffect} from 'react';
 import {StatsCards} from './components/StatsCards.tsx';
 import {WeeklyAppointments} from './components/WeeklyAppointments.tsx';
 import {EmployeeWorkload} from './components/EmployeeWorkload.tsx';
-import {DashboardStats, Appointment ,EmployeeWorkload as WorkloadType} from './types.ts';
-import {LoadingSpinner} from '../../shared/ui/LoadingSpinner.tsx';
+import type {DashboardStats, Appointment ,EmployeeWorkload as WorkloadType} from './types';
+import LoadingSpinner from '../../shared/ui/LoadingSpinner.tsx';
 
 //mocking data for demo
 const mockStats: DashboardStats = {
@@ -29,13 +29,13 @@ const mockWorkload: WorkloadType[]= [
 ];
 
 export const AdminDashboard = () =>{
-    const {loading,setLoading} = useState(true);
+    const [loading,setLoading] = useState(true);
 
     useEffect(() => {
         //simulate Api loading
         const timer = setTimeout(() => setLoading(false),500);
         return () => clearTimeout(timer);
-    }, []);
+    }, [setLoading]);
 
     if (loading) {
         return (
