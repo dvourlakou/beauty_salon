@@ -4,12 +4,10 @@ import {Calendar} from './components/Calendar';
 import { TimeSlots} from "./components/ΤimeSlots.tsx";
 import {SelectEmployee} from "./components/SelectEmployee.tsx";
 import {BookingSummary} from "./components/BookingSummary.tsx";
-import  {serviceApi} from '../../api/serviceApi';
-import type {appointmentApi} from "../../api/appointmentApi.ts";
 import type{ Service , Employee ,BookingDetails } from './types.ts';
 import LoadingSpinner  from "../../shared/ui/LoadingSpinner.tsx";
 import toast from 'react-hot-toast';
-import {ServiceCard} from "../services/components/ServiceCard.tsx";
+
 
 export const BookingPage = () => {
     const navigate = useNavigate();

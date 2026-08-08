@@ -1,6 +1,6 @@
 import { Outlet, NavLink } from 'react-router';
-import { LayoutDashboard, Scissors, Users, Logout } from 'lucide-react';
-import { useAuth } from "../auth/hooks/useAuth.tsx";
+import { LayoutDashboard, Scissors, Users, LogOut } from 'lucide-react';
+import { useAuth } from "../auth";
 import { useNavigate } from "react-router";
 
 export const AdminLayout = () => {
@@ -37,7 +37,7 @@ export const AdminLayout = () => {
                 <button
                     onClick={handleLogout}
                     className="flex items-center gap-3 px-4 py -3 text-gray-400 hover:text-red-400 transition-colors">
-                    <Logout size={20} /> Αποσύνδεση
+                    <LogOut size={20} /> Αποσύνδεση
                 </button>
             </aside>
 
