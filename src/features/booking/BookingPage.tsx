@@ -4,10 +4,10 @@ import {Calendar} from './components/Calendar';
 import { TimeSlots} from "./components/ΤimeSlots.tsx";
 import {SelectEmployee} from "./components/SelectEmployee.tsx";
 import {BookingSummary} from "./components/BookingSummary.tsx";
-import {serviceApi} from "../../api/serviceApi.ts";
-import { appointmentApi} from "../../api/appointmentApi.ts";
-import { Service , Employee ,BookingDetails } from './types.ts';
-import { LoadingSpinner } from "../../shared/ui/LoadingSpinner.tsx";
+import  {serviceApi} from '../../api/serviceApi';
+import type {appointmentApi} from "../../api/appointmentApi.ts";
+import type{ Service , Employee ,BookingDetails } from './types.ts';
+import LoadingSpinner  from "../../shared/ui/LoadingSpinner.tsx";
 import toast from 'react-hot-toast';
 import {ServiceCard} from "../services/components/ServiceCard.tsx";
 
@@ -21,6 +21,9 @@ export const BookingPage = () => {
     const [selectedTime, setSelectedTime] = useState<string |null>(null);
     const [selectedEmployee, setSelectedEmployee] = useState<number |null>(null);
     const [availableSlots, setAvailableSlots] = useState<string[]>([]);
+    const [employees,setEmployees] = useState<Employee[]>([]);
+    const [loading,setLoading] = useState(true);
+    const [submitting, setSubmitting] = useState(false);
 
     //Loading service details
     useEffect(() => {
@@ -46,7 +49,7 @@ export const BookingPage = () => {
                 setLoading(false);
             }
         };
-        fetchService();
+        void fetchService();
     }, [serviceId,navigate]);
 
     //Loading employees for each service
@@ -69,7 +72,8 @@ export const BookingPage = () => {
                 3: 'MASSAGE',
             };
             const spec = categoryMap[service.categoryId] || 'NAIL';
-            const filtered = mockEmployees.filter(amp => emp.specialization === spec);
+            const filtered = mockEmployees.filter(emp => emp.specialization === spec);
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setEmployees(filtered);
         }
     }, [service]);
@@ -77,9 +81,11 @@ export const BookingPage = () => {
     //Loading available slots when the user changes date
     useEffect(() => {
         if (selectedDate && service) {
-            const dateStr = selectedDate.toISOString().split('T')[0];
             //χρησιμοποιώ mock slots διαθέσιμες ώρες για δοκιμή
-            const mockSlots = ['10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00','13:30','14:00','14:30','15:00', '15:30','16:00','16:30','17:00', '17:30', '18:00', '18:30','19:00','19:30'];
+            const mockSlots = ['10:00', '10:30', '11:00', '11:30', '12:00', '12:30',
+                '13:00','13:30','14:00','14:30','15:00', '15:30','16:00',
+                '16:30','17:00', '17:30', '18:00', '18:30','19:00','19:30'];
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setAvailableSlots(mockSlots);
         }
     },[selectedDate, service]);
@@ -120,7 +126,7 @@ export const BookingPage = () => {
             toast.error('Μη επιτυχής κράτηση. Παρακαλώ δοκιμάστε ξανά.');
         }
         finally {
-            setSubmiting(false);
+            setSubmitting(false);
         }
     };
 
@@ -171,7 +177,7 @@ export const BookingPage = () => {
                     <TimeSlots
                             slots={availableSlots}
                             selectedTime={selectedTime}
-                            onSelectTime={setSelectedTime}
+                            onSelectedTime={setSelectedTime}
                     />
                   </div>
                 )}
@@ -201,7 +207,7 @@ export const BookingPage = () => {
                 {/* submit button */}
                 <button
                     onClick={handleBooking}
-                    disabled={selectedDate || selectedTime || submitting}
+                    disabled={!selectedDate || !selectedTime || submitting}
                     className="w -full text-lg font-semibold text-white bg-pink-300 rounded-xl hover:bg-pink-400 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl">
                     {submitting ? 'Κλείσιμο ραντεβού...' : 'Κλείστε ραντεβού'}
                 </button>

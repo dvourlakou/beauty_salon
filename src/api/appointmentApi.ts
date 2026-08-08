@@ -1,6 +1,6 @@
 import axiosInstance from './axiosConfig';
 import type {BookingDetails, Employee} from '../features/booking';
-import type { Appointment} from '../features/admin';
+import type {Appointment} from '../features/admin';
 
 export const appointmentApi = {
     getAvailableSlots: async (
