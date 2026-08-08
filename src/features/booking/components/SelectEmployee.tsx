@@ -1,4 +1,4 @@
-import {Employee} from '../types';
+import type {Employee} from '../types';
 
 interface SelectEmployeeProps {
     employees: Employee[];

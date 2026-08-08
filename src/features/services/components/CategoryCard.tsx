@@ -1,14 +1,14 @@
 import {useState} from 'react';
 import {ChevronDown, ChevronUp} from 'lucide-react';
-import {ServiceCategory} from '../types';
+import type {ServiceCategory} from '../types';
 import {ServiceCard} from './ServiceCard.tsx';
 
 interface CategoryCardProps {
     category: ServiceCategory;
-    onSelect: (serviceId: number) => void;
+    onSelectService: (serviceId: number) => void;
 }
 
-export const CategoryCard = ({ category, onSelectService }: CategoryCard) => {
+export const CategoryCard = ({ category, onSelectService }: CategoryCardProps) => {
     const [isExpanded, setIsExpanded] = useState(false);
 
     //Χρήση emoji για πιο όμορφη πλοήγηση στις κατηγορίες υπηρεσιών

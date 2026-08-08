@@ -1,4 +1,4 @@
-import { Service, Employee } from '../types';
+import type { Service, Employee } from '../types';
 
 interface BookingSummaryProps {
     service: Service;
@@ -35,26 +35,26 @@ export const BookingSummary = ({
 
                 {service.durationMinutes && (
                     <div className="flex justify-between py-2 border-b border-gray-50">
-                        <span className="text-gray 500">Διάρκεια</span>
+                        <span className="text-gray-500">Διάρκεια</span>
                         <span className="font-medium text-gray-800">{service.durationMinutes}Λεπτά</span>
                     </div>
                 )}
 
                 <div className="flex justify-between py-2 border-b border-gray-50">
-                    <span className="text-gray 500">Τιμή</span>
-                    <span className="font-medium text-gray-800">{service.price}</span>
+                    <span className="text-gray-500">Τιμή</span>
+                    <span className="font-medium text-gray-800">{service.price}€</span>
                 </div>
 
                 {date && (
                     <div className="flex justify-between py-2 border-b border-gray-50">
-                        <span className="text-gray 500">Ημερομηνία</span>
+                        <span className="text-gray-500">Ημερομηνία</span>
                         <span className="font-medium text-gray-800">{formDate(date)}</span>
                     </div>
                 )}
 
                 {time && (
                     <div className="flex justify-between py-2 border-b border-gray-50">
-                        <span className="text-gray 500">Ώρα</span>
+                        <span className="text-gray-500">Ώρα</span>
                         <span className="font-medium text-gray-800">{time}</span>
                     </div>
 
@@ -62,7 +62,7 @@ export const BookingSummary = ({
 
                 {employee && (
                     <div className="flex justify-between py-2 border-b border-gray-50">
-                        <span className="text-gray 500">Αισθητικός</span>
+                        <span className="text-gray-500">Αισθητικός</span>
                         <span className="font-medium text-gray-800">{employee.name}</span>
                     </div>
 

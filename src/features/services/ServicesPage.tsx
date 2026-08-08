@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { CategoryCard } from './components/CategoryCard.tsx';
 import { mockCategories } from "./mockData.ts";
-import { ServiceCategory } from './types.ts';
-import { LoadingSpinner } from '../../shared/ui/LoadingSpinner.tsx';
+import type { ServiceCategory } from './types.ts';
+import   LoadingSpinner  from '../../shared/ui/LoadingSpinner.tsx';
 
 export const ServicesPage = () => {
     const navigate = useNavigate();

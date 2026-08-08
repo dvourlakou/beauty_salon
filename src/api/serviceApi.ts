@@ -1,5 +1,5 @@
 import axiosInstance from './axiosConfig';
-import { ServiceCategory, Service} from '../features/services/types';
+import type { ServiceCategory, Service} from '../features/services';
 
 export const serviceApi = {
     getCategories: async (): Promise<ServiceCategory[]> => {
@@ -8,7 +8,12 @@ export const serviceApi = {
     },
 
     getCategoryById: async (id: number): Promise<ServiceCategory> => {
-        const response = await axiosInstance.get<ServiceCategory>('/services/categories/${id}');
+        const url = `http://localhost:5173/api/v1/categories/${id}`;
+        const response = await axiosInstance.get<ServiceCategory>(url, {
+            headers : {
+                "Content - Type" : "application/json",
+            },
+        });
         return response.data;
     },
 
