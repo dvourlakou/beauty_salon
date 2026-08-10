@@ -1,0 +1,25 @@
+
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: beauty_salon_mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: beauty_salon
+      MYSQL_USER: beauty_salon_user
+      MYSQL_PASSWORD: beauty_salon_pass
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - beauty_salon_network
+volumes:
+  mysql_data:
+
+networks:
+  beauty_salon_network:
+    driver: bridge
+
