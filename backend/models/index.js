@@ -1,4 +1,7 @@
 const {Sequelize} = require('sequelize');
+const dotenv = require('dotenv');
+
+dotenv.config({path:'./.env'});
 
 
 const sequelize = new Sequelize(
@@ -14,5 +17,14 @@ const sequelize = new Sequelize(
 );
 
 const db = {sequelize};
+
+//import modules
+db.User = require('./User')(sequelize);
+db.ServiceCategory = require('./ServiceCategory')(sequelize);
+db.Service = require('./Service')(sequelize);
+
+//relationships
+db.ServiceCategory.hasMany(db.Service, {foreignKey: 'categoryId'});
+db.Service.belongsTo(db.ServiceCategory, {foreignKey: 'categoryId'});
 
 module.exports = db;
