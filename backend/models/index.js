@@ -22,9 +22,30 @@ const db = {sequelize};
 db.User = require('./User')(sequelize);
 db.ServiceCategory = require('./ServiceCategory')(sequelize);
 db.Service = require('./Service')(sequelize);
+db.Employee = require('./Employee')(sequelize);
+db.Appointment = require('./Appointment')(sequelize);
+db.Review = require('./Review')(sequelize);
 
-//relationships
+//Σχέσεις μεταξύ των πινάκων
+
+//ServiceCategory με Service
 db.ServiceCategory.hasMany(db.Service, {foreignKey: 'categoryId'});
 db.Service.belongsTo(db.ServiceCategory, {foreignKey: 'categoryId'});
+
+//Employee με Appointment
+db.Employee.hasMany(db.Appointment, {foreignKey: 'employeeId'});
+db.Appointment.belongsTo(db.Employee, {foreignKey: 'employeeId'});
+
+//User as Customer με Appointment
+db.User.hasMany(db.Appointment, {foreignKey: 'customerId'});
+db.Appointment.belongsTo(db.User, {foreignKey: 'customerId'});
+
+//Service με Appointment
+db.Service.hasMany(db.Appointment, {foreignKey: 'serviceId'});
+db.Appointment.belongsTo(db.Service, {foreignKey: 'serviceId'});
+
+//Appointment με  Review 1to1
+db.Appointment.hasOne(db.Review, {foreignKey: 'appointmentId'});
+db.Review.belongsTo(db.Appointment, {foreignKey: 'appointmentId'});
 
 module.exports = db;
