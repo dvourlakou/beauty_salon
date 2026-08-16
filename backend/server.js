@@ -8,7 +8,7 @@ const { sequelize } = require('./models');
 
 //import routes
 const authRoutes = require('./routes/authRoutes');
-const serviceRoutes = require('./routes/serviceRoute');
+const serviceRoutes = require('./routes/serviceRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
