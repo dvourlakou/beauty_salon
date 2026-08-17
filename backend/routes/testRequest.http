@@ -1,0 +1,12 @@
+### Register ( δημιουργία admin χρήστη)
+POST http://localhost:5000/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "admin@beauty.com",
+  "name": "Admin User",
+  "password": "admin321"
+}
+
+
+###
