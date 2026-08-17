@@ -99,4 +99,74 @@ const deleteService = async (req,res) => {
     }
 };
 
+//3. ΔΙΑΧΕΙΡΙΣΗ ΑΙΣΘΗΤΙΚΩΝ (crud)
+
+const getAllEmployees = async (req,res) => {
+    try {
+        const employees = await Employee.findAll();
+        res.status(200).json(employees);
+    }
+    catch (error) {
+        res.status(500).json({message: 'Παρουσιάστηκε σφάλμα κτά τη λήψη αισθητικών'});
+    }
+};
+
+const createEmployee = async (req,res) => {
+    try {
+        const {name, specialization} = req.body;
+        const employee = await Employee.create({ name, specialization, isActive: true });
+        res.status(201).json(employee);
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({message: 'Παρουσιάστηκε σφάλμα κατά τη δημιουργία αισθητικού'});
+    }
+};
+
+const updateEmployee = async (req,res) => {
+    try {
+        const {id} = req.params;
+        const {name,specialization,isActive} = req.body;
+        const employee = await Employee.findByPk(id);
+        if (!employee) {
+            return res.status(404).json({message: 'Ο/Η αισθητικός δε βρέθηκε'});
+        }
+        await employee.update({ name,specialization,isActive });
+        res.status(200).json(employee);
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({message: 'Παρουσιάστηκε σφάλμα κατά την ενημέρωση'});
+    }
+};
+
+const deleteEmployee = async (req,res) => {
+    try {
+        const {id} = req.params;
+        const employee = await Employee.findByPk(id);
+        if (!employee) {
+            return res.status(404).json({message: 'Ο/Η αισθητικός δε βρέθηκε'});
+        }
+        await employee.destroy();
+        return res.status(200).json({message: 'Ο/Η αισθητικός διαγράφηκε'});
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({message: 'Παρουσιάστηκε σφάλμα κατά τη διαγραφή'});
+    }
+};
+
+module.exports = {
+    getStats,
+    getAllServices,
+    createService,
+    updateService,
+    deleteService,
+    getAllEmployees,
+    createEmployee,
+    updateEmployee,
+    deleteEmployee
+};
+
+
 
