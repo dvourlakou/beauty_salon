@@ -9,7 +9,7 @@ const {
     createEmployee,
     updateEmployee,
     deleteEmployee
-} = require('../controllers/adminContoller');
+} = require('../controllers/adminController');
 
 const authMiddleware = require('../middleware/auth');
 const {isAdmin} = require('../middleware/roleCheck');

@@ -1,5 +1,5 @@
 const express = require('express');
-const {getAllCategories,getServiceById} = require('../controllers/authContoller');
+const {getAllCategories,getServiceById} = require('../controllers/serviceController');
 
 const router = express.Router();
 
