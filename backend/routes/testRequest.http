@@ -9,4 +9,12 @@ Content-Type: application/json
 }
 
 
-###
+###Login (σύνδεση χρήστη)
+POST http://localhost:5000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@beauty.com",
+  "password": "admin321"
+
+}
