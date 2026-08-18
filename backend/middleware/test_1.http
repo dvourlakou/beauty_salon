@@ -1,0 +1,38 @@
+### Register
+POST http://localhost:5000/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "test@beauty.com",
+  "name": "Test User",
+  "password": "test123"
+}
+
+
+### Login
+POST http://localhost:5000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "test@beauty.com",
+  "password": "test123"
+}
+
+
+###Λήψη ραντεβού
+GET http://localhost:5000/api/appointments/my
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJ0ZXN0QGJlYXV0eS5jb20iLCJuYW1lIjoiVGVzdCBVc2VyIiwiaWF0IjoxNzg3MDUyNDAzLCJleHAiOjE3ODc2NTcyMDN9.LZrUXkTb4GR2DPxrvaBtLkDHFzQRdEm9VuREACv9igg
+
+
+###Δημιουργία ραντεβού
+POST http://localhost:5000/api/appointments
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJ0ZXN0QGJlYXV0eS5jb20iLCJuYW1lIjoiVGVzdCBVc2VyIiwiaWF0IjoxNzg3MDUyNDAzLCJleHAiOjE3ODc2NTcyMDN9.LZrUXkTb4GR2DPxrvaBtLkDHFzQRdEm9VuREACv9igg
+
+{
+  "serviceId": 1,
+  "employeeId": 1,
+  "date": "2026-08-18",
+  "time": "10:30",
+  "notes": "πρώτο ραντεβού"
+}

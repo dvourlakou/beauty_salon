@@ -10,7 +10,7 @@ const createAppointment = async (req,res) => {
         //Βρίσκω την υπηρεσία για να δω αντίστοιχη τιμή και διάρκεια
         const service = await Service.findByPk(serviceId);
         if (!service) {
-            return req.status(404).json({message: 'Η υπηρεσία δε βρέθηκε'});
+            return res.status(404).json({message: 'Η υπηρεσία δε βρέθηκε'});
         }
 
         //Ελέγχω αν ο/η αισθητικός είναι διαθέσιμος/η
