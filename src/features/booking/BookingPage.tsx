@@ -7,7 +7,7 @@ import {BookingSummary} from "./components/BookingSummary.tsx";
 import type{ Service , Employee ,BookingDetails } from './types.ts';
 import LoadingSpinner  from "../../shared/ui/LoadingSpinner.tsx";
 import toast from 'react-hot-toast';
-
+import {serviceApi} from "../../api/serviceApi.ts";
 
 export const BookingPage = () => {
     const navigate = useNavigate();
@@ -23,25 +23,17 @@ export const BookingPage = () => {
     const [loading,setLoading] = useState(true);
     const [submitting, setSubmitting] = useState(false);
 
+
     //Loading service details
     useEffect(() => {
         const fetchService = async () => {
             try {
-                //χρησιμοποιώ mock data για δοκιμή
-                const { mockCategories } = await import('../services/mockData.ts');
-                const allServices = mockCategories.flatMap(cat => cat.services || []);
-                const found = allServices.find(s => s.id === serviceId);
-                if (found) {
-                    setService(found);
-                }
-                else {
-                    toast.error('Η υπηρεσία δε βρέθηκε');
-                    navigate('/services');
-                }
+                const data = await serviceApi.getServiceById(serviceId);
+                setService(data);
             }
-            catch {
-                toast.error('Η υπηρεσία δε βρέθηκε');
-                navigate('/services');
+            catch (error) {
+            toast.error('Η υπηρεσία δε βρέθηκε');
+            navigate('/services');
             }
             finally {
                 setLoading(false);
