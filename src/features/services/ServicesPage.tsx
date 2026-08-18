@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { CategoryCard } from './components/CategoryCard.tsx';
-import { mockCategories } from "./mockData.ts";
+import { serviceApi } from "../../api/serviceApi.ts";
 import type { ServiceCategory } from './types.ts';
 import   LoadingSpinner  from '../../shared/ui/LoadingSpinner.tsx';
 
@@ -11,14 +11,20 @@ export const ServicesPage = () => {
     const [loading,setLoading] = useState(true);
 
     useEffect(() => {
-        //Προσομοίωση φόρτωσης από το API
-        const loadCategories = () => {
-            setTimeout(() => {
-                setCategories(mockCategories);
+        const fetchCategories = async () => {
+            try {
+                const data = await serviceApi.getCategories();
+                setCategories(data);
+            }
+            catch (error) {
+                console.error('Failed to fetch services',error);
+            }
+            finally {
                 setLoading(false);
-            },500);
+            }
         };
-        loadCategories();
+        void fetchCategories();
+
     }, []);
 
     const handleSelectService = (serviceId: number) => {
