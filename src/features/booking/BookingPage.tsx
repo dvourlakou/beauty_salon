@@ -8,6 +8,7 @@ import type{ Service , Employee ,BookingDetails } from './types.ts';
 import LoadingSpinner  from "../../shared/ui/LoadingSpinner.tsx";
 import toast from 'react-hot-toast';
 import {serviceApi} from "../../api/serviceApi.ts";
+import {appointmentApi} from "../../api/appointmentApi.ts";
 
 export const BookingPage = () => {
     const navigate = useNavigate();
@@ -24,14 +25,14 @@ export const BookingPage = () => {
     const [submitting, setSubmitting] = useState(false);
 
 
-    //Loading service details
+    //Φόρτωση υπηρεσίας από το API
     useEffect(() => {
         const fetchService = async () => {
             try {
                 const data = await serviceApi.getServiceById(serviceId);
                 setService(data);
             }
-            catch (error) {
+            catch  {
             toast.error('Η υπηρεσία δε βρέθηκε');
             navigate('/services');
             }
@@ -42,44 +43,43 @@ export const BookingPage = () => {
         void fetchService();
     }, [serviceId,navigate]);
 
-    //Loading employees for each service
+    //Φόρτωση εργαζομένων από το API
     useEffect(() => {
         if (service) {
-            //χρησιμοποιώ mock employees για δοκιμή
-            const mockEmployees: Employee[] = [
-                { id:1, name: 'Αισθητικός 1', specialization: 'NAIL' },
-                { id:2, name: 'Αισθητικός 2', specialization: 'NAIL' },
-                { id:3, name: 'Αισθητικός 3', specialization: 'WAXING' },
-                { id:4, name: 'Αισθητικός 4', specialization: 'WAXING' },
-                { id:5, name: 'Αισθητικός 5', specialization: 'MASSAGE' },
-                { id:6, name: 'Αισθητικός 6', specialization: 'MASSAGE' },
-            ];
-
-            //φίλτρο ανά κατηγορία
-            const categoryMap: Record<number, string> = {
-                1: 'NAIL',
-                2: 'WAXING',
-                3: 'MASSAGE',
+            const fetchEmployees = async () => {
+                try {
+                    const data = await appointmentApi.getEmployeeByService(service.id);
+                    setEmployees(data);
+                } catch (error) {
+                    console.error('Failed to load employees:', error);
+                }
             };
-            const spec = categoryMap[service.categoryId] || 'NAIL';
-            const filtered = mockEmployees.filter(emp => emp.specialization === spec);
-            // eslint-disable-next-line react-hooks/set-state-in-effect
-            setEmployees(filtered);
+            void fetchEmployees();
         }
     }, [service]);
 
-    //Loading available slots when the user changes date
+    //Φόρτωση διαθέσιμων ωρών από το API
     useEffect(() => {
         if (selectedDate && service) {
-            //χρησιμοποιώ mock slots διαθέσιμες ώρες για δοκιμή
-            const mockSlots = ['10:00', '10:30', '11:00', '11:30', '12:00', '12:30',
-                '13:00','13:30','14:00','14:30','15:00', '15:30','16:00',
-                '16:30','17:00', '17:30', '18:00', '18:30','19:00','19:30'];
-            // eslint-disable-next-line react-hooks/set-state-in-effect
-            setAvailableSlots(mockSlots);
+            const fetchSlots = async () => {
+                try {
+                    const dateStr = selectedDate.toISOString().split('T')[0];
+                    const slots = await appointmentApi.getAvailableSlots(
+                        service.id,
+                        dateStr,
+                        selectedEmployee || undefined
+                    );
+                    setAvailableSlots(slots);
+                }
+                catch (error) {
+                    console.error('Failed to load slots:', error);
+                }
+            };
+            void fetchSlots();
         }
-    },[selectedDate, service]);
+    },[selectedDate, service, selectedEmployee]);
 
+    //Δημιουργία ραντεβού
     const handleBooking = async () => {
         if (!selectedDate || !selectedTime || !service) {
             toast.error('Παρακαλώ επιλέξτε την ημερομηνία και ώρα ου σας εξυπηρετεί');
