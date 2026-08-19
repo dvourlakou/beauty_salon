@@ -5,10 +5,11 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {z} from 'zod';
 import {useAuth} from './hooks/useAuth.tsx';
 import toast from 'react-hot-toast';
+import {AxiosError} from "axios";
 
 
 const loginSchema = z.object({
-    email: z.string().email('Παρακαλώ γράψτε το email σας'),
+    email: z.email('Παρακαλώ γράψτε το email σας'),
     password: z.string().min(6,'Ο κωδικός σας πρέπει να αποτελείται από τουλάχιστον 6 χαρακτήρες'),
 });
 
@@ -17,7 +18,7 @@ type LoginFormData = z.infer<typeof loginSchema>;
 const LoginPage = () => {
     const navigate = useNavigate();
     const {login} = useAuth();
-    const {isLoading , setIsLoading} = useState(false);
+    const [isLoading , setIsLoading] = useState(false);
 
     const {
         register,
@@ -34,8 +35,9 @@ const LoginPage = () => {
             toast.success('Καλώς ήρθατε');
             navigate('/services');
         }
-        catch {
-            toast.error('Δώσατε λάθος email ή password');
+        catch (error: unknown) {
+            const message = (error as AxiosError<{message: string}>).response?.data?.message || 'Δώσατε λάθος email ¨η κωδικό';
+            toast.error(message);
         }
         finally {
             setIsLoading(false);

@@ -5,10 +5,10 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {z} from 'zod';
 import {useAuth} from './hooks/useAuth';
 import toast from 'react-hot-toast';
-
+import {AxiosError} from 'axios';
 
 const registerSchema = z.object ({
-    email: z.string().email( " Παρακαλώ καταχωρήστε το email σας"),
+    email: z.email( " Παρακαλώ καταχωρήστε το email σας"),
     name: z.string().min(2 , "Το όνομα σας πρέπει να αποτελείται από τουλάχιστον 2 χαρακτήρες"),
     password: z.string().min(6 , "Ο κωδικός σας πρέπει να αποτελείται από τουλάχιστον 6 χαρακτήρες"),
     confirmPassword: z.string(),
@@ -43,8 +43,9 @@ const RegisterPage = () => {
             toast.success('Η εγγραφή σας ολοκληρώθηκε με επιτυχία, μπορείτε να συνδεθείτε');
             navigate('login');
         }
-        catch {
-            toast.error('Το email σας χρησιμοποιείται ήδη')
+        catch (error: unknown){
+            const message = (error as AxiosError<{message: string}>).response?.data?.message || 'Το email σας χρησιμοποιείται ήδη';
+            toast.error(message);
         }
         finally {
             setIsLoading(false);
