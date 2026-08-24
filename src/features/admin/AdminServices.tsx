@@ -1,46 +1,96 @@
-import {useState} from 'react';
+import {useState,useEffect} from 'react';
 import {Plus, Edit, Trash2, Save, X} from 'lucide-react';
-import {mockCategories} from '../services';
+import {adminApi} from '../../api/adminApi.ts';
 import type {Service, ServiceCategory} from '../services';
 import toast from 'react-hot-toast';
 
 export const AdminServices = () => {
-    const [categories, setCategories] = useState<ServiceCategory[]>(mockCategories);
+    const [categories, setCategories] = useState<ServiceCategory[]>([]);
+    const [loading,setLoading] = useState(true);
     const [editingService, setEditingService] = useState<Service | null>(null);
     const[showNewService, setShowNewService] = useState(false);
     const [newService,setNewService] = useState({name: '', price: 0, categoryId: 0});
-    const handleDelete = (id:number) => {
+
+    //Φόρτωση Υπηρεσιών
+    
+    const fetchServices = async () => {
+        try {
+            const data = await  adminApi.getAllServices();
+            setCategories(data);
+        }
+        catch (error) {
+            toast.error((error as Error).message ||'Αποτυχία φόρτωσης υπηρεσιών');
+        }
+        finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        //eslint-disable-next-line react-hooks/set-state-in-effect
+         void fetchServices();
+    },[]);
+
+    //Διαγραφή Υπηρεσιών
+
+    const handleDelete = async (id: number) => {
         if (!confirm('Είστε σίγουρος/η;')) return;
-        setCategories(prev=> prev.map(cat=> ({
-            ...cat,
-            services: cat.services?.filter(s => s.id !== id)
-        })));
-        toast.success('Η υπηρεσία διαγράφηκε');
+        try {
+            await adminApi.deleteService(id);
+            toast.success('Η υπηρεσία διαγράφηκε');
+            void fetchServices();
+        }
+        catch (error) {
+            toast.error((error as Error).message ||'Αποτυχία διαγραφής');
+        }
     };
 
-    const handleUpdate = (service:Service)=> {
-        setCategories(prev => prev.map(cat => ({
-            ...cat,
-            services: cat.services?.map(s => s.id === service.id ? service: s)
-        })));
-        setEditingService(null);
-        toast.success('Η υπηρεσία ενημερώθηκε');
+    //Ενημέρωση Υπηρεσίας
+
+    const handleUpdate = async (service: Service) => {
+        try {
+            await adminApi.updateService(service.id, {
+                name: service.name,
+                price: service.price,
+                durationMinutes: service.durationMinutes,
+                description: service.description,
+                isActive: service.isActive
+            });
+            toast.success('Η υπηρεσία ενημερώθηκε');
+            void fetchServices();
+        }
+        catch (error) {
+            toast.error((error as Error).message ||'Αποτυχία ενημέρωσης');
+        }
     };
 
-    const handleAdd = () => {
-        if (!newService.name || newService.price <= 0 || newService.categoryId) {
+    //Προσθήκη Υπηρεσίας
+
+    const handleAdd = async () => {
+        if (!newService.name || newService.price <= 0 || !newService.categoryId) {
             toast.error('Συμπληρώστε όλα τα πεδία');
             return;
         }
-        const newId = Date.now();
-        setCategories(prev => prev.map(cat => ({
-            ...cat,
-            services: cat.id === newService.categoryId? [...(cat.services || []), {...newService, id: newId, isActive: true,categoryId: newService.categoryId}] : cat.services
-        })));
-        setShowNewService(false);
-        setNewService({ name: '', price: 0, categoryId: 0});
-        toast.success('Η υπηρεσία προστέθηκε');
+        try {
+            await adminApi.createService(newService);
+            toast.success('Η υπηρεσία προστέθηκε');
+            setShowNewService(false);
+            setNewService({name: '', price: 0, categoryId: 0});
+            void fetchServices();
+        } catch (error) {
+            toast.error((error as Error).message ||'Αποτυχία προσθήκης');
+        }
     };
+
+   //Render
+
+    if (loading) {
+        return (
+            <div className="min-h-[60vh] flex items-center justify-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-pink-300" />
+            </div>
+        );
+    }
 
     return (
         <div>
