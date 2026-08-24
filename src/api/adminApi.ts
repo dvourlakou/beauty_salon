@@ -1,7 +1,7 @@
 import axiosInstance from './axiosConfig';
-import { ServiceCategory , Service } from '../features/services/types';
-import { Employee } from '../features/booking/types';
-import { DashboardStats, Appointment, EmployeeWorkload } from '../features/admin/types';
+import type {ServiceCategory, Service} from '../features/services';
+import type {Employee} from '../features/booking';
+import type {DashboardStats, Appointment, EmployeeWorkload} from '../features/admin';
 
 export const adminApi = {
 
@@ -17,14 +17,14 @@ export const adminApi = {
     },
 
     getEmployeeWorkload: async (): Promise<EmployeeWorkload[]> => {
-        const response = await axiosInstance.get<EmployeeWorkload>('/admin/employees/workload');
+        const response = await axiosInstance.get<EmployeeWorkload[]>('/admin/employees/workload');
         return response.data;
     },
 
 
     //Services
     getAllServices: async (): Promise<ServiceCategory[]> => {
-        const response = await axiosInstance.get<ServiceCategory>('/admin/services');
+        const response = await axiosInstance.get<ServiceCategory[]>('/admin/services');
         return response.data;
     },
 
