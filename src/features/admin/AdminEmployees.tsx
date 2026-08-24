@@ -1,21 +1,9 @@
-import {useState} from 'react';
-import { Plus, Edit, Trash2, Save, X} from 'lucide-react';
+import {useState,useEffect} from 'react';
+import { Plus, Edit,  Trash2, Save, X} from 'lucide-react';
+import {adminApi} from '../../api/adminApi.ts';
+import type {Employee} from '../booking';
 import toast from 'react-hot-toast';
 
-interface Employee {
-    id: number;
-    name: string;
-    specialization: string;
-}
-
-const mockEmployees: Employee[] = [
-    {id: 1, name: 'Αισθητικός 1', specialization: 'NAIL'},
-    {id: 2, name: 'Αισθητικός 2', specialization: 'NAIL'},
-    {id: 3, name: 'Αισθητικός 3', specialization: 'WAXING'},
-    {id: 4, name: 'Αισθητικός 4', specialization: 'WAXING'},
-    {id: 5, name: 'Αισθητικός 5', specialization: 'MASSAGE'},
-    {id: 6, name: 'Αισθητικός 6', specialization: 'MASSAGE'},
-];
 
 const specializationLabels: Record<string, string> = {
     NAIL: 'Περιποίηση Νυχιών',
@@ -24,34 +12,92 @@ const specializationLabels: Record<string, string> = {
 };
 
 export const AdminEmployees = () => {
-    const [employees, setEmployees] = useState<Employee[]>(mockEmployees);
+    const [employees, setEmployees] = useState<Employee[]>([]);
+    const [loading,setLoading] = useState(true);
     const [editingEmployee, setEditingEmployee] = useState<Employee | null>(null);
     const [showNewEmployee, setShowNewEmployee] = useState(false);
     const [newEmployee, setNewEmployee] = useState({name: '', specialization: ''});
 
-    const handleDelete = (id: number) => {
-        if (!confirm('Είστε σίγουρος/η')) return;
-        setEmployees(prev => prev.filter(e => e.id !== id));
-        toast.success('Η αισθητικός διαγράφηκε');
+
+    //Φόρτωση Αισθητικών
+    
+    const fetchEmployees = async () => {
+        try {
+            const data = await  adminApi.getAllEmployees();
+            setEmployees(data);
+        }
+        catch (error) {
+            toast.error((error as Error).message ||'Αποτυχία φόρτωσης αισθητικών');
+        }
+        finally {
+            setLoading(false);
+        }
     };
 
-    const handleUpdate = (employee: Employee) => {
-        setEmployees(prev => prev.map(e => e.id === employee.id ? employee : e));
-        setEditingEmployee(null);
-        toast.success('Η αισθητικός ενημερώθηκε');
+    useEffect(() => {
+        //eslint-disable-next-line react-hooks/set-state-in-effect
+        void fetchEmployees();
+    },[]);
+
+    //Διαγραφή Αισθητικού
+
+    const handleDelete = async (id: number) => {
+        if (!confirm('Είστε σίγουρος/η;')) return;
+        try {
+            await adminApi.deleteEmployee(id);
+            toast.success('Ο/Η αισθητικός διαγράφηκε');
+            void fetchEmployees();
+        }
+        catch (error) {
+            toast.error((error as Error).message ||'Αποτυχία διαγραφής');
+        }
     };
 
-    const handleAdd = () => {
+    //Ενημέρωση Αισθητικού
+
+    const handleUpdate = async (employee: Employee) => {
+        try {
+            await adminApi.updateEmployee(employee.id, {
+                name: employee.name,
+                specialization: employee.specialization,
+            });
+            toast.success('Ο/Η αισθητικός ενημερώθηκε');
+            setEditingEmployee(null);
+            void fetchEmployees();
+        }
+        catch (error) {
+            toast.error((error as Error).message ||'Αποτυχία ενημέρωσης');
+        }
+    };
+    
+    //Προσθήκη Αισθητικού
+
+    const handleAdd = async () => {
         if (!newEmployee.name || !newEmployee.specialization) {
             toast.error('Παρακαλώ συμπληρώστε όλα τα πεδία');
             return;
         }
-        setEmployees(prev => [...prev, {...newEmployee, id: Date.now()}]);
-        setShowNewEmployee(false);
-        setNewEmployee({name: '', specialization: ''});
-        toast.success('Η αισθητικός προστέθηκε');
+        try {
+            await adminApi.createEmployee(newEmployee);
+            toast.success('Η υπηρεσία προστέθηκε');
+            setShowNewEmployee(false);
+            setNewEmployee({name: '', specialization: ''});
+            void fetchEmployees();
+        } catch (error) {
+            toast.error((error as Error).message ||'Αποτυχία προσθήκης');
+        }
     };
 
+    //Render
+    
+    if (loading) {
+        return (
+            <div className="min-h-[60vh] flex items-center justify-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-pink-300" />
+            </div>
+        );
+    }
+    
     return (
         <div>
             <div className="flex items-center justify-between mb-6">
