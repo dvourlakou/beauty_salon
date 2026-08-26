@@ -2,11 +2,11 @@ const swaggerJsdoc = require('swagger-jsdoc');
 
 const options = {
     definition: {
-        openApi: '3.0.0',
+        openapi: '3.0.0',
         info: {
             title: 'Beauty Salon API',
             version: '1.0.0',
-            description: 'API documentation fot the BeautySalon Management System',
+            description: 'API documentation for the BeautySalon Management System',
         },
         servers: [
             {
@@ -15,7 +15,7 @@ const options = {
             },
         ],
     },
-    apis: ['./route/*.js', './controllers/*.js'],
+    apis: ['./routes/*.js', './controllers/*.js'],
 };
 
 const specs = swaggerJsdoc(options);
