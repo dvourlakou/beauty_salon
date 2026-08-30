@@ -65,6 +65,21 @@ const LoginPage = () => {
                     )}
                 </div>
 
+                <div>
+                    <input
+                        type = 'password'
+                        placeholder = 'Κωδικός'
+                        {...register('password')}
+                        className={`w-full px-4 py-3 text-lg border-2 rounded-lg focus:outline-none focus:border-pink-300 transition-colors 
+                                     ${errors.password ? 'border-red-400' : 'border-gray-200'}
+                                     `}
+                    />
+                    {errors.password && (
+                        <p className = "text-red-400 text-sm mt-1">{errors.password.message}</p>
+                    )}
+                </div>
+
+
                 <button
                     type = 'submit'
                     disabled = {isLoading}

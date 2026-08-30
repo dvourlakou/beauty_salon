@@ -41,7 +41,7 @@ const RegisterPage = () => {
                 password: data.password,
             });
             toast.success('Η εγγραφή σας ολοκληρώθηκε με επιτυχία, μπορείτε να συνδεθείτε');
-            navigate('login');
+            navigate('/login');
         }
         catch (error: unknown){
             const message = (error as AxiosError<{message: string}>).response?.data?.message || 'Το email σας χρησιμοποιείται ήδη';
