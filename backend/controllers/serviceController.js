@@ -3,14 +3,33 @@ const {ServiceCategory,Service} = require('../models');
 //λήψη όλων των κατηγοριών με τις υπηρεσίες τους
 const getAllCategories = async (req,res) => {
     try {
-        const categories = await ServiceCategory.findAll({
-            include: [{model: Service, as : 'Services'}],
-        });
-        res.status(200).json(categories);
+        res.status(200).json([
+            { id:1, name: 'Περιποίηση Νυχιών',
+                Services: [{ id: '1', name: 'Μανικιουρ/Πεντικιούρ', price: 25, categoryId: '1'}]},
+            { id:2, name: 'Αποτρίχωση',
+                Services: [{ id: '2', name: 'Αποτρίχωση', price: 25, categoryId: '2'}]},
+            { id:3, name: 'Μασάζ',
+                Services: [{ id: '3', name: 'Μασάζ', price: 25, categoryId: '3'}]}
+        ]);
     }
     catch (error) {
         console.error(error);
         res.status(500).json({message: 'Σφάλμα κατά τη λήψη των κατηγοριών'});
+    }
+
+};
+
+const getAllServices = async (req,res) => {
+    try {
+        res.status(200).json([
+            { id:'1', name: 'Περιποίηση Νυχιών', price:25, categoryId:'1'},
+            { id:'2', name: 'Αποτρίχωση', price : 40, categoryId: '2'},
+            { id:'3', name: 'Μασάζ', price :30, categoryId: '3'}
+        ]);
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({message: 'Σφάλμα κατά τη λήψη των υπηρεσιών'});
     }
 
 };
@@ -31,4 +50,4 @@ const getServiceById = async (req,res) => {
     }
 };
 
-module.exports = {getAllCategories,getServiceById};
+module.exports = {getAllCategories,getAllServices,getServiceById};

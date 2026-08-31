@@ -17,8 +17,8 @@ const {isAdmin} = require('../middleware/roleCheck');
 const router = express.Router();
 
 //Όλα τα ADMIN routes χρειάζονται authentication και ADMIN role
-router.use(authMiddleware);
-router.use(isAdmin);
+//router.use(authMiddleware);
+//router.use(isAdmin);
 
 /**
  * @swagger

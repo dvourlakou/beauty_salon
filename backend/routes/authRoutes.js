@@ -1,5 +1,6 @@
 const express = require('express');
-const {register,login} = require('../controllers/authController');
+const {register,login,getMe} = require('../controllers/authController');
+const authMiddleware = require('../middleware/auth');
 
 const router = express.Router();
 
@@ -73,5 +74,21 @@ router.post('/register', register);
  */
 
 router.post('/login', login);
+
+/**
+ * @swagger
+ * /api/auth/me:
+ *   get:
+ *     summary: Λήψη στοιχείων του συνδεδεμένου χρήστη
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Στοιχεία χρήστη
+ *       401:
+ *         description: Μη εξουσιοδοτημένος
+ */
+
+router.get('/me', authMiddleware, getMe);
 
 module.exports = router;

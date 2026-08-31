@@ -14,6 +14,7 @@ export const ServicesPage = () => {
         const fetchCategories = async () => {
             try {
                 const data = await serviceApi.getCategories();
+
                 setCategories(data);
             }
             catch (error) {

@@ -86,4 +86,19 @@ const login = async(req,res) => {
     }
 };
 
-module.exports = {register,login};
+const getMe = async (req,res) => {
+    try {
+        res.status(200).json({
+            id: 1,
+            email: 'dvou@hotmail.gr',
+            role: "ADMIN",
+            name: "admin user"
+        });
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({message: 'Παρουσιάστηκε σφάλμα κατά τη λήψη του χρήστη'});
+    }
+};
+
+module.exports = {register,login, getMe};
