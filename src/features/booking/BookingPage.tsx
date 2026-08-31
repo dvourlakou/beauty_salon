@@ -104,7 +104,7 @@ export const BookingPage = () => {
                     serviceName: service.name,
                     date: bookingData.date,
                     time: bookingData.time,
-                    employeeNme: employees.find(e => e.id === selectedEmployee)?.name,
+                    employeeName: employees.find(e => e.id === selectedEmployee)?.name,
                     price: service.price,
                     email: 'user@example.com',
                 }
@@ -198,7 +198,7 @@ export const BookingPage = () => {
                 <button
                     onClick={handleBooking}
                     disabled={!selectedDate || !selectedTime || submitting}
-                    className="w -full text-lg font-semibold text-white bg-pink-300 rounded-xl hover:bg-pink-400 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl">
+                    className="w-full text-lg font-semibold text-white bg-pink-300 rounded-xl hover:bg-pink-400 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl">
                     {submitting ? 'Κλείσιμο ραντεβού...' : 'Κλείστε ραντεβού'}
                 </button>
 

@@ -14,7 +14,7 @@ const options = {
                 description: 'Development server',
             },
         ],
-        basepath: '/api',
+        basePath: '/api',
     },
     apis: ['./routes/*.js', './controllers/*.js'],
 };

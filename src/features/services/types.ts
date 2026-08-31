@@ -16,6 +16,7 @@ export interface ServiceCategory {
     description?: string;
     icon?: string;
     services?: Service[];
+    Services?: Service[];
     isActive: boolean;
 
 }

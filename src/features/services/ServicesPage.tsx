@@ -29,6 +29,7 @@ export const ServicesPage = () => {
     }, []);
 
     const handleSelectService = (serviceId: number) => {
+        console.log('Service selected:', serviceId);
         navigate(`/booking?service=${serviceId}`);
     };
 
