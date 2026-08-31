@@ -29,7 +29,7 @@ db.Review = require('./Review')(sequelize);
 //Σχέσεις μεταξύ των πινάκων
 
 //ServiceCategory με Service
-db.ServiceCategory.hasMany(db.Service, {foreignKey: 'categoryId'});
+db.ServiceCategory.hasMany(db.Service, {foreignKey: 'categoryId', as: 'Services'});
 db.Service.belongsTo(db.ServiceCategory, {foreignKey: 'categoryId'});
 
 //Employee με Appointment
