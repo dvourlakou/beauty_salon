@@ -8,12 +8,7 @@ export const serviceApi = {
     },
 
     getCategoryById: async (id: number): Promise<ServiceCategory> => {
-        const url = `http://localhost:5173/api/v1/categories/${id}`;
-        const response = await axiosInstance.get<ServiceCategory>(url, {
-            headers : {
-                "Content - Type" : "application/json",
-            },
-        });
+        const response = await axiosInstance.get<ServiceCategory>(`/services/categories/${id}`);
         return response.data;
     },
 
