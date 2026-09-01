@@ -18,7 +18,7 @@ router.get('/categories', getAllCategories);
 
 /**
  * @swagger
- * /api/services/(id):
+ * /api/services/{id}:
  *   get:
  *     summary: Λήψη μιας υπηρεσίας με το ID της
  *     parameters:
@@ -35,6 +35,6 @@ router.get('/categories', getAllCategories);
  *
  */
 
-router.get('/id', getServiceById);
+router.get('/:id', getServiceById);
 
 module.exports = router;
