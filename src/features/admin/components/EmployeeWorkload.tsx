@@ -10,6 +10,10 @@ export const EmployeeWorkload = ({workload} : EmployeeWorkloadProps) => {
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
             <h2 className="text-lg font-semibold text-gray-700 mb-4"> Ραντεβού Αισθητικών</h2>
 
+            {workload.length === 0 ? (
+                <p className="text-gray-400 text-center py-4">Δε υπάρχουν διαθέσιμα στοιχεία</p>
+            ) : (
+
             <div className="space-y-4">
                 {workload.map((employee) => {
                     const percentage = Math.min((employee.total / employee.capacity)*100,100);
@@ -32,6 +36,7 @@ export const EmployeeWorkload = ({workload} : EmployeeWorkloadProps) => {
                     );
                 })}
             </div>
+            )}
         </div>
     );
 };
