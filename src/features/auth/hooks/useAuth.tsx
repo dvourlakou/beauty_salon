@@ -20,8 +20,10 @@ export const AuthProvider = ( { children }: { children: React.ReactNode } ) => {
                     const userData = await authApi.getMe();
                     setUser(userData);
                 }
-            } catch {
+            } catch (error) {
+                console.error('Failed to load user session:',error);
                 localStorage.removeItem('token');
+                setUser(null);
             } finally {
                 setIsLoading(false);
             }
