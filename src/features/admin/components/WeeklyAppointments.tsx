@@ -37,6 +37,7 @@ export const WeeklyAppointments = ({ appointments }: WeeklyAppointmentsProps) =>
                                <tr className="text-b border-gray-100">
                                 <th className="text-left py-2 font-medium text-gray-400">Ημερομηνία</th>
                                 <th className="text-left py-2 font-medium text-gray-400">Ώρα</th>
+                                <th className="text-left py-2 font-medium text-gray-400">Υπηρεσία</th>
                                 <th className="text-left py-2 font-medium text-gray-400">Αισθητικός</th>
                                 <th className="text-left py-2 font-medium text-gray-400">Κατάσταση</th>
                                </tr>
@@ -44,10 +45,10 @@ export const WeeklyAppointments = ({ appointments }: WeeklyAppointmentsProps) =>
                             <tbody>
                             {appointments.map((app) => (
                                 <tr key={app.id} className="border-b border-gray-50 hover:bg-gray-50">
-                                    <td className="py-3">{app.date}</td>
-                                    <td className="py-3">{app.time}</td>
-                                    <td className="py-3">{app.serviceName}</td>
-                                    <td className="py-3">{app.employeeName}</td>
+                                    <td className="py-3 text-gray-700">{app.date}</td>
+                                    <td className="py-3 text-gray-700">{app.time}</td>
+                                    <td className="py-3 font-medium text-gray-800">{app.serviceName}</td>
+                                    <td className="py-3 text-gray-600">{app.employeeName || '-'}</td>
                                     <td className="py-3">{getStatusBadge(app.status)}</td>
                                 </tr>
                                 ))}
