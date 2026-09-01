@@ -26,11 +26,22 @@ export const ProtectedRoute = ({ children, roles}: ProtectedRouteProps) => {
 
     //αν υπάρχουν roles όμως ο User δεν εχει κανένα απο αυτούς
 
-    if (roles && roles.length >0 && !roles.includes(user.role)) {
-        return <Navigate to = "/services" replace />;
+    if (roles && roles.length >0) {
+        const userRole = user.roles && user.roles.length > 0
+           ? user.roles[0]
+           : '';
+
+        const isAllowed = roles.some((r) => r.toUpperCase() === userRole.toUpperCase());
+
+
+
+        if (!isAllowed) {
+            console.warn(`Access denied. User role: ${userRole}, Required: ${roles.join(',')}`);
+            return <Navigate to="/services" replace/>;
+        }
     }
 
-    return children;
+    return <> {children} </>;
 
 
 };

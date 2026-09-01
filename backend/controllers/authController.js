@@ -30,7 +30,7 @@ const register = async (req,res) => {
                 id: user.id,
                 email: user.email,
                 name: user.name,
-                role: user.role,
+                roles: user.roles,
             },
         });
     }
@@ -62,7 +62,7 @@ const login = async(req,res) => {
             id: user.id,
             email: user.email,
             name: user.name,
-            role: user.role},
+            roles: user.roles},
         process.env.JWT_SECRET,
             {expiresIn: '7d'}
         );
@@ -75,7 +75,7 @@ const login = async(req,res) => {
                 id: user.id,
                 email: user.email,
                 name: user.name,
-                role: user.role,
+                roles: user.roles,
             },
         });
 
