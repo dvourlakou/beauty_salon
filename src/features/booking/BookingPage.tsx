@@ -9,10 +9,19 @@ import LoadingSpinner  from "../../shared/ui/LoadingSpinner.tsx";
 import toast from 'react-hot-toast';
 import {serviceApi} from "../../api/serviceApi.ts";
 import {appointmentApi} from "../../api/appointmentApi.ts";
+import {useAuth} from "../auth";
+
+const  formatDateToLocalString = (date: Date): string => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() +1).padStart(2,'0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+};
 
 export const BookingPage = () => {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
+    const {user} = useAuth();
     const serviceId = parseInt(searchParams.get('service') || '0');
 
     const [service,setService] = useState<Service | null>(null);
@@ -63,7 +72,7 @@ export const BookingPage = () => {
         if (selectedDate && service) {
             const fetchSlots = async () => {
                 try {
-                    const dateStr = selectedDate.toISOString().split('T')[0];
+                    const dateStr = formatDateToLocalString(selectedDate);
                     const slots = await appointmentApi.getAvailableSlots(
                         service.id,
                         dateStr,
@@ -89,16 +98,21 @@ export const BookingPage = () => {
         setSubmitting(true);
 
         try {
+            const formattedDate = formatDateToLocalString(selectedDate);
             const bookingData: BookingDetails = {
                 serviceId: service.id,
-                date: selectedDate.toISOString().split('T')[0],
+                date: formattedDate,
                 time: selectedTime,
                 employeeId: selectedEmployee || undefined,
             };
 
-            console.log('Booking data:', bookingData);
+            //Αποστολή αιτήματος στο Api
+            await appointmentApi.createBooking(bookingData);
 
-            //πλοήγηση στη σελίδα επιβεβαίωσης κράτησης
+            toast.success('Η κράτηση ολοκληρώθηκε με επιτυχία');
+
+
+            //πλοήγηση στη σελίδα επιβεβαίωσης κράτησης με το email του χρήστη
             navigate('/confirmation' , {
                 state: {
                     serviceName: service.name,
@@ -106,7 +120,7 @@ export const BookingPage = () => {
                     time: bookingData.time,
                     employeeName: employees.find(e => e.id === selectedEmployee)?.name,
                     price: service.price,
-                    email: 'user@example.com',
+                    email: user?.email || 'Δε δηλώθηκε email',
                 }
             });
 

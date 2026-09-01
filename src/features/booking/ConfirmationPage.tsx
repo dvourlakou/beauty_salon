@@ -54,21 +54,21 @@ export const ConfirmationPage = () => {
 
                 {/* confirmation details */}
                 <div className="bg-gray-50 rounded-xl p-4 mb-6 text-left space-y-3">
-                    <div className="flex-items-center gap-3">
+                    <div className="flex items-center gap-3">
                         <Calendar size={18} className="text-pink-400"/>
                         <span className="text-gray-700">
                             <strong>Ημερομηνία:</strong> {formatDate(data.date)}
                         </span>
                     </div>
 
-                    <div className="flex-itmes-center gap-3">
+                    <div className="flex itmes-center gap-3">
                         <Clock size={18} className="text-pink-400"/>
                         <span className="text-gray-700">
                             <strong>Ώρα:</strong> {data.time}
                         </span>
                     </div>
 
-                    <div className="flex-items-center gap-3">
+                    <div className="flex items-center gap-3">
                         <User size={18} className="text-pink-400"/>
                         <span className="text-gray-700">
                             <strong>Υπηρεσία:</strong> {data.serviceName}
@@ -76,7 +76,7 @@ export const ConfirmationPage = () => {
                     </div>
 
                     {data.employeeName && (
-                        <div className="flex-items-center gap-3">
+                        <div className="flex items-center gap-3">
                             <User size={18} className="text-pink-400"/>
                             <span className="text-gray-700">
                                <strong>Αισθητικός:</strong> {data.employeeName}
@@ -85,7 +85,7 @@ export const ConfirmationPage = () => {
                     )
                     }
 
-                    <div className="flex-items-center gap-3">
+                    <div className="flex items-center gap-3">
                         <DollarSign size={18} className="text-pink-400"/>
                         <span className="text-gray-700">
                             <strong>Τιμή:</strong> {data.price}€

@@ -13,8 +13,8 @@ export const BookingSummary = ({
     time,
     employee,
 }: BookingSummaryProps) => {
-    const formDate = (date: Date) => {
-        return date.toLocaleDateString('el', {
+    const formatDate = (date: Date) => {
+        return date.toLocaleDateString('el-GR', {
             weekday: 'long',
             year: 'numeric',
             month: 'long',
@@ -36,7 +36,7 @@ export const BookingSummary = ({
                 {service.durationMinutes && (
                     <div className="flex justify-between py-2 border-b border-gray-50">
                         <span className="text-gray-500">Διάρκεια</span>
-                        <span className="font-medium text-gray-800">{service.durationMinutes}Λεπτά</span>
+                        <span className="font-medium text-gray-800">{service.durationMinutes} Λεπτά</span>
                     </div>
                 )}
 
@@ -48,7 +48,7 @@ export const BookingSummary = ({
                 {date && (
                     <div className="flex justify-between py-2 border-b border-gray-50">
                         <span className="text-gray-500">Ημερομηνία</span>
-                        <span className="font-medium text-gray-800">{formDate(date)}</span>
+                        <span className="font-medium text-gray-800">{formatDate(date)}</span>
                     </div>
                 )}
 
