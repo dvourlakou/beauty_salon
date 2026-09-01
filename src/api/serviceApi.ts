@@ -18,7 +18,7 @@ export const serviceApi = {
     },
 
     getServiceByCategory: async (categoryId: number): Promise<Service[]> => {
-        const response = await axiosInstance.get<Service[]>(` /services/category/${categoryId}` );
+        const response = await axiosInstance.get<Service[]>(`/services/category/${categoryId}` );
         return response.data;
     },
 };

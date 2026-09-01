@@ -38,15 +38,12 @@ export const BookingPage = () => {
     useEffect(() => {
         const fetchService = async () => {
             try {
-                console.log('Fetching service with ID:', serviceId);
                 const data = await serviceApi.getServiceById(serviceId);
-                console.log('Service received:', data);
                 setService(data);
             }
-            catch (error) {
-                console.error('Detailed Error in getServiceById:',error);
+            catch  {
                 toast.error('Η υπηρεσία δε βρέθηκε');
-                //navigate('/services');
+                navigate('/services');
             }
             finally {
                 setLoading(false);
