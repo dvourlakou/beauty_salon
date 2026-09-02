@@ -169,8 +169,11 @@ export const BookingPage = () => {
                     <h2 className="text-lg font-semibold text-gray-700 mb-4">Επιλέξτε Ημερομηνία</h2>
                     <Calendar
                         selectedDate={selectedDate}
-                        onSelectDate={setSelectedDate}
-                        />
+                        onSelectDate={(date) => {
+                            setSelectedDate(date);
+                            setSelectedTime(null);
+                        }}
+                    />
 
                    </div>
 
@@ -193,7 +196,10 @@ export const BookingPage = () => {
                         <SelectEmployee
                             employees={employees}
                             selectedEmployee={selectedEmployee}
-                            onSelectEmployee={setSelectedEmployee}
+                            onSelectEmployee={(empId) => {
+                                setSelectedEmployee(empId);
+                                setSelectedTime(null);
+                            }}
                         />
                     </div>
                 )}
@@ -212,7 +218,7 @@ export const BookingPage = () => {
                 <button
                     onClick={handleBooking}
                     disabled={!selectedDate || !selectedTime || submitting}
-                    className="w-full text-lg font-semibold text-white bg-pink-300 rounded-xl hover:bg-pink-400 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl">
+                    className="w-full py-3 text-lg font-semibold text-white bg-pink-300 rounded-xl hover:bg-pink-400 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl">
                     {submitting ? 'Κλείσιμο ραντεβού...' : 'Κλείστε ραντεβού'}
                 </button>
 
