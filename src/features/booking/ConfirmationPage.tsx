@@ -1,6 +1,7 @@
 import { useNavigate, useLocation } from 'react-router';
 import { CheckCircle , Calendar, Clock, User, DollarSign ,Mail} from "lucide-react";
 import Button from '../../shared/ui/Βutton.tsx';
+import {useEffect} from "react";
 
 
 interface ConfirmationData {
@@ -18,10 +19,13 @@ export const ConfirmationPage = () => {
     const data = location.state as ConfirmationData;
 
     //αν δεν υφίστανται data, redirect στις υπηρεσίες
-    if (!data) {
-        navigate('/services');
-        return null;
-    }
+    useEffect(() => {
+        if (!data) {
+            navigate('/services');
+        }
+    }, [data, navigate]);
+
+    if (!data) return null;
 
     const formatDate = (dateStr: string) => {
         const date = new Date(dateStr);
@@ -61,7 +65,7 @@ export const ConfirmationPage = () => {
                         </span>
                     </div>
 
-                    <div className="flex itmes-center gap-3">
+                    <div className="flex items-center gap-3">
                         <Clock size={18} className="text-pink-400"/>
                         <span className="text-gray-700">
                             <strong>Ώρα:</strong> {data.time}
