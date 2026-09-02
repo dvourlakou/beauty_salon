@@ -3,7 +3,8 @@ const jwt = require('jsonwebtoken');
 const authMiddleware = ( req, res, next) => {
     try {
         // 1) Παίρνουμε το token από το header Authorization
-        const token = req.header('authorization')?.split(' ')[1];
+        const authHeader  = req.header('Authorization') || req.header('authorization');
+        const token = authHeader?.split(' ')[1];
 
         // 2) Αν δεν υπάρχει token στέλνουμε error
         if (!token) {

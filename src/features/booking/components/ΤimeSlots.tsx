@@ -22,7 +22,7 @@ const generateTimeSlots = (): string[] => {
 //Όλες οι διαθέσιμες ώρες (σταθερές)
 const ALL_TIME_SLOTS = generateTimeSlots();
 
-export const TimeSlots = ({ slots, selectedTime, onSelectTime }: TimeSlotsProps) => {
+export const TimeSlots = ({ slots, selectedTime, onSelectedTime }: TimeSlotsProps) => {
 
     //Αν δεν υπάρχουν διαθέσιμες ώρες θέλω να εμφανίζεται μήνυμα στο user
     if (slots.length === 0) {
@@ -46,11 +46,11 @@ export const TimeSlots = ({ slots, selectedTime, onSelectTime }: TimeSlotsProps)
                     key={time}
                     onClick={() => {
                         if (isAvailable) {
-                            onSelectTime(time);
+                            onSelectedTime(time);
                         }
                     }}
                     disabled={!isAvailable}
-                    className={`py-2 px-3 rounded-lg text-sm font-medium transition-all ${isSelected ? 'bg-pink-300 text-white shadow-md' : isAvailable ? 'bg-gray-50 text-gray-700 hover:bg-pink-50 hover:border-pink-200 border border-transparent hover:border-pink-200' : 'bg-gray-100 text-gray-300 cursor-not-allowed opacity-5'}`}>
+                    className={`py-2 px-3 rounded-lg text-sm font-medium transition-all ${isSelected ? 'bg-pink-300 text-white shadow-md' : isAvailable ? 'bg-gray-50 text-gray-700 hover:bg-pink-50 hover:border-pink-200 border border-transparent' : 'bg-gray-100 text-gray-300 cursor-not-allowed opacity-50'}`}>
                     {time}
                 </button>
             );
