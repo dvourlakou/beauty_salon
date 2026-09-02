@@ -1,11 +1,33 @@
 const express = require('express');
-const {createAppointment, getMyAppointment, cancelAppointment} = require('../controllers/appointmentController');
+const {createAppointment, getMyAppointment, cancelAppointment,getAvailableSlots} = require('../controllers/appointmentController');
 const authMiddleware = require('../middleware/auth');
 
 const router = express.Router();
 
+/**
+ * @swagger
+ * /api/appointments/slots:
+ *   get:
+ *     summary: Λήψη διαθέσιμων ωρών για συγκεκριμένη υπηρεσία και ημερομηνία
+ *     parameters:
+ *       - in: query
+ *         name: serviceId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *       - in: query
+ *         name: date
+ *         required: true
+ *         schema:
+ *           type: string
+ *      responses:
+ *        200:
+ *          description: Λίστα διαθέσιμων slots
+ */
 
-//Όλα τα routes χρειάζονται authentication
+router.get('/slots', getAvailableSlots);
+
+//Όλα τα routes που χρειάζονται authentication
 router.use(authMiddleware);
 
 /**
@@ -84,6 +106,6 @@ router.get('/my', getMyAppointment);
 
 
 
-router.delete('/.id', cancelAppointment);
+router.delete('/:id', cancelAppointment);
 
 module.exports = router;
