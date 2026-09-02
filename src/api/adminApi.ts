@@ -21,6 +21,10 @@ export const adminApi = {
         return response.data;
     },
 
+    completeAppointment: async (id: number): Promise<void> => {
+        await axiosInstance.patch(`/admin/appointments/${id}/complete`);
+    },
+
 
     //Services
     getAllServices: async (): Promise<ServiceCategory[]> => {
@@ -28,7 +32,13 @@ export const adminApi = {
         return response.data;
     },
 
-    createService: async (data: { name: string; price: number; categoryId: number}): Promise<Service> => {
+    createService: async (data: {
+        name: string;
+        price: number;
+        categoryId: number
+        description?: string;
+        durationMinutes?: number
+    }): Promise<Service> => {
         const response = await axiosInstance.post<Service>('/admin/services', data);
         return response.data;
     },
@@ -63,9 +73,6 @@ export const adminApi = {
     deleteEmployee: async (id: number): Promise<void> => {
         await axiosInstance.delete(`/admin/employees/${id}`);
 
-    },
+    }
 
-    completeAppointment: async (id: number): Promise<void> => {
-        await axiosInstance.patch(`/admin/appointments/${id}/complete`);
-    },
 };

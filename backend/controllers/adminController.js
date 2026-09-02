@@ -1,4 +1,4 @@
-const { User, ServiceCategory, Employee, Appointment } = require('../models');
+const { User, ServiceCategory, Service, Employee, Appointment } = require('../models');
 const { Op } = require('sequelize');
 
 //1. ΣΤΑΤΙΣΤΙΚΑ DASHBOARD
@@ -6,13 +6,19 @@ const { Op } = require('sequelize');
 const getStats = async (req, res) => {
     try {
         const total = await Appointment.count();
+
+        const todayStr = new Date().toISOString().split('T')[0];
         const today = await Appointment.count({
-            where: { date: new Date().toISOString().split('T')[0]}
+            where: { date: todayStr }
         });
-        const thisWeek = await Appointment.count({
+
+        const sevenDaysAgo = new Date();
+        sevenDaysAgo.setDate(sevenDaysAgo.getDate() -7);
+
+        const thisWeek =await Appointment.count({
             where: {
-                date: {
-                    [Op.gte]: new Date(new Date().setDate(new Date().getDate() -7))
+                createdAt: {
+                    [Op.gte]: sevenDaysAgo
                 }
             }
         });
@@ -26,6 +32,60 @@ const getStats = async (req, res) => {
         console.error(error);
         res.status(500).json({message: 'Παρουσιάστηκε σφάλμα κατά τη λήψη των στατιστικών'});
     }
+};
+
+const getWeeklyAppointments = async (req,res) => {
+    try {
+        const appointments = await Appointment.findAll({
+            include: [
+                {model: User, attributes: ['id', 'name', 'email']},
+                {model: Employee, attributes: ['id', 'name']},
+                {model: Service, attributes: ['id', 'name', 'price']},
+            ],
+            order: [[ 'date', 'ASC'], ['time', 'ASC']]
+        });
+        res.status(200).json(appointments);
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({message: 'Παρουσιάστηκε σφάλμα κατά τη λήψη των ραντεβού'});
+    }
+};
+
+const getEmployeeWorkload = async (req,res) => {
+    try {
+        const employees = await Employee.findAll({
+            include: [{ model: Appointment, as : 'appointments'}]
+        });
+
+        const workload = employees.map(emp => ({
+            id: emp.id,
+            name: emp.name,
+            appointmentCount: emp.appointments ? emp.appointments.length : 0
+        }));
+        res.status(200).json(workload);
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({message: 'Παρπυσιάστηκε σφάλμα κατά τη λήψη του φόρτου εργασίας'});
+    }
+};
+
+const completeAppointment = async (req,res) => {
+    try {
+        const {id} =req.params;
+        const appointment = await Appointment.findByPk(id);
+        if(!appointment) {
+            return res.status(404).json({message: 'Το ραντεβού δε βρέθηκε'});
+        }
+        await appointment.update({ status : 'COMPLETED'});
+        res.status(200).json({message: 'Το ραντεβού ολοκληρώθηκε' });
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({message: 'Παρουσιάστηκε σφάλμα κατά την ενημέρωση ραντεβού'})
+    }
+
 };
 
 //2. ΔΙΑΧΕΙΡΙΣΗ ΥΠΗΡΕΣΙΩΝ (CRUD)
@@ -158,6 +218,9 @@ const deleteEmployee = async (req,res) => {
 
 module.exports = {
     getStats,
+    getWeeklyAppointments,
+    getEmployeeWorkload,
+    completeAppointment,
     getAllServices,
     createService,
     updateService,

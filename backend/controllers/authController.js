@@ -21,6 +21,7 @@ const register = async (req,res) => {
             email,
             name,
             password: hashedPassword,
+            role: 'CUSTOMER'
         });
 
         //απάντηση χωρίς τον κωδικό
@@ -62,7 +63,7 @@ const login = async(req,res) => {
             id: user.id,
             email: user.email,
             name: user.name,
-            roles: user.roles},
+            role: user.role},
         process.env.JWT_SECRET,
             {expiresIn: '7d'}
         );
@@ -88,12 +89,13 @@ const login = async(req,res) => {
 
 const getMe = async (req,res) => {
     try {
-        res.status(200).json({
-            id: 1,
-            email: 'dvou@hotmail.gr',
-            role: "ADMIN",
-            name: "admin user"
+        const user = await User.findByPk(req.user.id, {
+            attributes: { exclude: ['password']}
         });
+        if (!user) {
+            return res.status(404).json({message: 'Ο χρήστης δε βρέθηκε'});
+        }
+        res.status(200).json(user);
     }
     catch (error) {
         console.error(error);

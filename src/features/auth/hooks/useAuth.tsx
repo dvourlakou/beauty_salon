@@ -43,8 +43,14 @@ export const AuthProvider = ( { children }: { children: React.ReactNode } ) => {
     };
 
     const logout = async () => {
-        await authApi.logout();
+        //1.καθαρίζω token απ το browser
+        localStorage.removeItem('token');
+
+        //2.μηδενίζω το state του χρήστη
         setUser(null);
+
+        //αν προσθέσω API call
+        //await authApi.logout();
     };
 
 
