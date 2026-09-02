@@ -15,7 +15,7 @@ const getAllEmployees = async (req,res) => {
 };
 
 //Λήψη υπαλλήλων με βάσει το serviceId
-const getAllEmployeesByService = async (req,res) => {
+const getEmployeesByService = async (req,res) => {
     try {
         const {serviceId} = req.params;
 
@@ -38,4 +38,4 @@ const getAllEmployeesByService = async (req,res) => {
     }
 };
 
-module.exports = {getAllEmployees,getAllEmployeesByService};
+module.exports = {getAllEmployees,getEmployeesByService};
