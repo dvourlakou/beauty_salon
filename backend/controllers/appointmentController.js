@@ -1,6 +1,40 @@
 const { Appointment, Service, Employee , User} = require('../models');
 const {Op} = require('sequelize');
 
+//Λήψηψ διαθέσιμων ωρών
+const getAvailableSlots = async (req,res) => {
+    try {
+        const {serviceId, date} = req.query;
+        if (!serviceId || !date) {
+            return res.status(400).json({message: 'Απαιτούνται τα serviceId Και date'});
+        }
+        //Πιθανά slots του καταστήματος
+        const possibleSlots = [
+            '11:00', '12:00', '13:00', '14:00','15:00', '16:00', '17:00', '18:00', '19:00'
+        ];
+
+        //Ποιά ρατεβού είναι ήδη κλεισμένα
+        const bookedAppointments = await Appointment.findAll({
+            where: {
+                serviceId,
+                date,
+                status: {[Op.not]: 'CANCELLED'}
+            },
+            attributes: ['time']
+        });
+
+        const bookedTimes = bookedAppointments.map(app => app.time);
+
+        //Φιλτάρισμα κλεισμένωνω ωρών
+        const availableSlots = possibleSlots.filter(slot => !bookedTimes.includes(slot));
+        res.status(200).json(availableSlots);
+    }
+    catch (error) {
+        console.error('Error fetching available slots:', error);
+        res.status(500).json({message: 'Παρουσιάστηκε σφάλμα κατά τη λήψη των διαθέσιμων ωρών'});
+    }
+};
+
 //Δημιουργία ραντεβού(για συνδεδεμένο χρήστη)
 const createAppointment = async (req,res) => {
     try {
@@ -15,10 +49,12 @@ const createAppointment = async (req,res) => {
 
         //Ελέγχω αν ο/η αισθητικός είναι διαθέσιμος/η
         const existingAppointment = await Appointment.findOne({
-            employeeId,
-            date,
-            time,
-            status: {[Op.not]: 'CANCELLED'},
+            where: {
+                employeeId,
+                date,
+                time,
+                status: {[Op.not]: 'CANCELLED'}
+            }
         });
         if (existingAppointment) {
             return res.status(400).json({message: 'Ο/Η αισθητικός δεν είναι διαθέσιμος/η αυτή την ώρα'});
@@ -101,4 +137,4 @@ const cancelAppointment = async (req,res) => {
     }
 };
 
-module.exports = {createAppointment, getMyAppointment, cancelAppointment};
+module.exports = {createAppointment, getMyAppointment, cancelAppointment,getAvailableSlots};
