@@ -1,6 +1,7 @@
 import {useState , useEffect} from 'react';
-import {Calendar, Clock , User , Phone, CheckCircle, xCircle, Trash2, Filter} from 'lucide-react';
+import {Calendar, Clock , User , Phone, CheckCircle, XCircle, Trash2, Filter} from 'lucide-react';
 import toast from 'react-hot-toast';
+import { adminApi } from '../../api/adminApi';
 
 export interface Appointment {
     id: number;
@@ -117,7 +118,7 @@ export const AdminAppointments = () => {
             </div>
 
 
-            //λίστα των ραντεβού
+            
             <div className="bg-white rounded-xl shadow-sm border-gray-8=100 overflow-hidden">
                 {filteredAppointmenets.length === 0 ? (
                     <div className="p-8 text-center text-gray-500">
