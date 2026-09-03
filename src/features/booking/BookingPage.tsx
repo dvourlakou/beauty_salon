@@ -1,7 +1,7 @@
 import {useState, useEffect} from 'react';
 import { useNavigate, useSearchParams } from "react-router";
 import {Calendar} from './components/Calendar';
-import { TimeSlots} from "./components/ΤimeSlots.tsx";
+import { TimeSlots} from "./components/TimeSlots.tsx";
 import {SelectEmployee} from "./components/SelectEmployee.tsx";
 import {BookingSummary} from "./components/BookingSummary.tsx";
 import type{ Service , Employee ,BookingDetails } from './types.ts';
@@ -91,7 +91,7 @@ export const BookingPage = () => {
     //Δημιουργία ραντεβού
     const handleBooking = async () => {
         if (!selectedDate || !selectedTime || !service) {
-            toast.error('Παρακαλώ επιλέξτε την ημερομηνία και ώρα ου σας εξυπηρετεί');
+            toast.error('Παρακαλώ επιλέξτε την ημερομηνία και ώρα που σας εξυπηρετεί');
             return;
         }
 
@@ -107,7 +107,7 @@ export const BookingPage = () => {
             };
 
             //Αποστολή αιτήματος στο Api
-            await appointmentApi.createBooking(bookingData);
+            const createAppointment = await appointmentApi.createBooking(bookingData);
 
             toast.success('Η κράτηση ολοκληρώθηκε με επιτυχία');
 
@@ -118,7 +118,7 @@ export const BookingPage = () => {
                     serviceName: service.name,
                     date: bookingData.date,
                     time: bookingData.time,
-                    employeeName: employees.find(e => e.id === selectedEmployee)?.name,
+                    employeeName: createdAppointment?.Employee?.name || employees.find(e => e.id === selectedEmployee)?.name,
                     price: service.price,
                     email: user?.email || 'Δε δηλώθηκε email',
                 }
