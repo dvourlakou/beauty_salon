@@ -1,7 +1,24 @@
-import { useNavigate } from 'react-router';
+import { useNavigate , useLocation } from 'react-router';
 
  export const ThankYouPage = () => {
      const navigate = useNavigate();
+     const location = useLocation();
+
+
+     //Έλεγχος, ώστε αν δεν προέκυψε η επισκεψη στη σελιδα απο επιβεβαωση να γυρίσει πίσω
+     if (!location.state) {
+        return (
+            <div className="min-h-screen flex flex-col items-center justify-center px-4 bg-white text-center">
+                <p className="text-gray-600 mb-4">Δε βρέθηκε πρόσφατη κράτηση</p>
+                <button 
+                   onClick={() => navigate('/')}
+                   className="px-6 py-2 bg-pink-300 text-white rounded-full hover:bg-pink-400 transition-all">
+                    Επιστροφή στην Αρχική
+                </button>
+            </div>
+        );
+     }
+     
 
      return (
          <div className="min-h-screen flex flex-col items-center justify-center px-4 bg-white">
