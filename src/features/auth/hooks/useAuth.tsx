@@ -1,52 +1,19 @@
+
 /* eslint-disable react-refresh/only-export-components */
-import { useState, useEffect, createContext , useContext } from 'react';
+import { useState, useEffect, createContext, useContext } from 'react';
 import * as React from 'react';
-import {authApi} from '../../../api/authApi';
-import  type { User, AuthContextType, RegisterData} from '../types';
+import { authApi } from '../../../api/authApi';
+import type { User, AuthContextType, RegisterData } from '../types';
 
+// Δημιουργία Context με αρχική τιμή null
+export const AuthContext = createContext<AuthContextType | null>(null);
 
-//Interface για την προσθήκη του τηλεφώνου
-export interface User {
-    id: number,
-    email: string,
-    phone: string,
-    role: string:
-}
-
-
-export interface RegisterData {
-    email: string;
-    name: string;
-    phone: string;
-    password: string;
-}
-
-export interface LoginData {
-    email: string;
-    password: string:
-}
-
-interface AuthContextType {
-    user: User || null;
-    token: string | null;
-    isAuthenticated: boolean:
-    login: (data: LoginData) => Promise<void>;
-    register: (data: LoginData) => Promise<void>;
-    logout: () => void;
-    isLoading: boolean:
-}
-
- export const AuthContext = createContext<AuthContextType | null>(undefined);
-
-export const AuthProvider = ( { children }: { children: React.ReactNode } ) => {
-    const [user,setUser] = useState<User |null>(null);
+export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+    const [user, setUser] = useState<User | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
-    const [token, setToken] = useState<string | null>(localStorage.getItem('token'));
 
-
-    useEffect(()  => {
+    useEffect(() => {
         const loadUser = async () => {
-
             try {
                 const token = localStorage.getItem('token');
                 if (token) {
@@ -54,7 +21,7 @@ export const AuthProvider = ( { children }: { children: React.ReactNode } ) => {
                     setUser(userData);
                 }
             } catch (error) {
-                console.error('Failed to load user session:',error);
+                console.error('Failed to load user session:', error);
                 localStorage.removeItem('token');
                 setUser(null);
             } finally {
@@ -64,35 +31,26 @@ export const AuthProvider = ( { children }: { children: React.ReactNode } ) => {
         void loadUser();
     }, []);
 
-    const login = async (email: string,password: string) => {
+    const login = async (email: string, password: string) => {
         const response = await authApi.login(email, password);
         localStorage.setItem('token', response.token);
         setUser(response.user);
     };
 
-
     const register = async (data: RegisterData) => {
-        await  authApi.register(data);
+        await authApi.register(data);
     };
 
     const logout = async () => {
-        //1.καθαρίζω token απ το browser
         localStorage.removeItem('token');
-
-        //2.μηδενίζω το state του χρήστη
         setUser(null);
-
-        //αν προσθέσω API call
-        //await authApi.logout();
     };
-
 
     return (
         <AuthContext.Provider value={{ user, isLoading, login, register, logout }}>
             {children}
         </AuthContext.Provider>
     );
-
 };
 
 export const useAuth = () => {
