@@ -16,5 +16,6 @@ export type AuthContextType = {
 export type RegisterData = {
     email: string;
     name: string;
+    phone: string;
     password: string;
 };
