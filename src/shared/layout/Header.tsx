@@ -20,20 +20,23 @@ const Header = () => {
 
                 {/* Navigation */}
                 <nav className = "flex items-center gap-6">
-                    <Link to = "services" className = "text-white hover:text-pink-300 transition-colors">
+                    <Link to = "/services" className = "text-white hover:text-pink-300 transition-colors">
                         Υπηρεσίες
                     </Link>
 
 
                 {user && (
                     <>
-                    <Link to = "/my-bookings" className = "text-white hover:text-pink-300 transition-colors">
-                        Τα ραντεβού μου </Link>
-                    {user.role === 'ADMIN' &&(
-                        <Link to="/admin" className="text-white hover:text-pink-300 transition-colors">
-                        Admin
+                    {user.role !=='ADMIN' && (
+                        <Link to = "/my-bookings" className = "text-white hover:text-pink-300 transition-colors">
+                           Τα ραντεβού μου
                         </Link>
-                        )}
+                    )}
+                    {user.role === 'ADMIN' && (
+                        <Link to="/admin" className="text-white hover:text-pink-300 transition-colors">
+                           Admin Dashboard
+                        </Link>
+                    )}
                     </>
 
                 )}
@@ -49,6 +52,7 @@ const Header = () => {
                 ) : (
                     <Link to = "/login" className = "text-white hover:text-pink-300 transition-colors">
                         <User size = {18} />
+                        <span> Σύνδεση </span>
                     </Link>
 
                 )}
