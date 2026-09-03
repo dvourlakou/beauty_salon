@@ -47,6 +47,8 @@ const seedDatabase = async () => {
             { name: 'Αισθητικός 6', email: 'emp6@salon.com' , specialization: 'MASSAGE' },
         ];
 
+        const createdEmployees = [];
+
         for (const emp of employeesData) {
             //δημιουργία user Λογαριασμού
             const  user = await User.create({
@@ -56,12 +58,39 @@ const seedDatabase = async () => {
                 role: 'EMPLOYEE'
             });
 
-            await Employee.create ({
+            const constEmployee = await Employee.create ({
                 name: emp.name,
                 specialization: emp.specialization,
                 userId: user.id
             });
+
+            createdEmployees.push(newEmployee);
         }
+
+        //Σύνδεση υπηρεσιών με αισθητικούς με βάση την ειδικότητα τους
+        //Περιποίηση Νυχιών -- αισθητικοι 1 και 2
+        const nailServices = services.filter( s => s.categoryId === categories[0].id);
+        cost nailEmployees = createdEmployees.filter(e => e.specialization === 'NAIL');
+        for (const service of nailServices) {
+            await service.addEmployees(nailEmployees);
+        }
+
+        //Αποτρίχωση -- αισθητικοί 3 και 4
+        const waxingServices = services.filter( s => s.categoryId === categories[1].id);
+        cost waxingEmployees = createdEmployees.filter(e => e.specialization === 'WAXING');
+        for (const service of waxingServices) {
+            await service.addEmployees(waxingEmployees);
+        }
+
+        //Μασάζ -- αισθητικοί 5 και 6
+        const massageServices = services.filter( s => s.categoryId === categories[2].id);
+        cost massageEmployees = createdEmployees.filter(e => e.specialization === 'MASSGE');
+        for (const service of massageServices) {
+            await service.addEmployees(massageEmployees);
+        }
+
+
+
 
         console.log('✅ Database seeded successfully!');
         process.exit(0);
