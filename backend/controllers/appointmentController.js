@@ -1,10 +1,11 @@
 const { Appointment, Service, Employee , User} = require('../models');
 const {Op} = require('sequelize');
 
-//Λήψηψ διαθέσιμων ωρών
+
+//Λήψη διαθέσιμων ωρών
 const getAvailableSlots = async (req,res) => {
     try {
-        const {serviceId, date} = req.query;
+        const {serviceId, date,employeeId} = req.query;
         if (!serviceId || !date) {
             return res.status(400).json({message: 'Απαιτούνται τα serviceId Και date'});
         }
@@ -14,18 +15,44 @@ const getAvailableSlots = async (req,res) => {
         ];
 
         //Ποιά ρατεβού είναι ήδη κλεισμένα
-        const bookedAppointments = await Appointment.findAll({
-            where: {
+        const whereClause = {
                 serviceId,
                 date,
                 status: {[Op.not]: 'CANCELLED'}
-            },
-            attributes: ['time']
+        };
+        
+        //Αν ο χρήστης επιλέξει συγκεκριμένο υπάλληλο
+        if (employeeId) {
+            whereClause.employeeId = employeeId;
+        }
+
+        const bookedAppointments = await Appointment.findAll({
+            where: whereClause,
+            attributes: ['time','employeeId']
         });
 
-        const bookedTimes = bookedAppointments.map(app => app.time);
+        //Αν δεν έχει επιλεγεί συγεκριμένος αισθητικός, ενα slot θεωρείται μη διαθέσιμο αν και οι δυο
+        //εργαζόμενοι είναι κλεισμένοι τη συγκεκριμένη ώρα
+        let bookedTimes = [];
 
-        //Φιλτάρισμα κλεισμένωνω ωρών
+        if (employeeId) {
+            bookedTimes = bookedAppointments.map(app > app.time);
+        } else {
+            const service = await Service.findByPk(serviceId, {
+                include: [{model: Employee, as: 'Employees', where: {isActive:true}, required: false}]
+            });
+            const totalEmployees = (service && service.Employees) ? service.Employees.length : 2;
+            
+            cosnt timeCounts = {};
+            bookedAppointments.forEach(app => {
+                timeCounts[app.time] = (timeCounts[app.time] || 0) + 1 ;
+            });
+
+            //κλείνω την ώρα μόνο αν όλοι οι διαθέσιμοι υπάλληλοι εχουν ραντεβού
+            bookedTimes = Object.keys(timeCounts).filter(time => timeCounts[time] >= totalEmployees);
+        
+        }
+
         const availableSlots = possibleSlots.filter(slot => !bookedTimes.includes(slot));
         res.status(200).json(availableSlots);
     }
@@ -38,27 +65,66 @@ const getAvailableSlots = async (req,res) => {
 //Δημιουργία ραντεβού(για συνδεδεμένο χρήστη)
 const createAppointment = async (req,res) => {
     try {
-        const {serviceId, employeeId, date, time, notes} = req.body;
+        let {serviceId, employeeId, date, time, notes} = req.body;
         const customerId = req.user.id; // από το auth middleware
 
         //Βρίσκω την υπηρεσία για να δω αντίστοιχη τιμή και διάρκεια
-        const service = await Service.findByPk(serviceId);
+        const service = await Service.findByPk(serviceId , {
+            include: [{
+                model: Employee,
+                as: 'Employees',
+                where: {isActive: true},
+                through: {attributes: []},
+                required: false
+            }]
+        });
+
         if (!service) {
             return res.status(404).json({message: 'Η υπηρεσία δε βρέθηκε'});
         }
 
-        //Ελέγχω αν ο/η αισθητικός είναι διαθέσιμος/η
-        const existingAppointment = await Appointment.findOne({
-            where: {
-                employeeId,
-                date,
-                time,
-                status: {[Op.not]: 'CANCELLED'}
+        //Αυτόματη ανάθεση αν το employeeId είναι null / undefined
+        if (!employeeId) {
+            const assignedEmployees = service.Employees || await Employee.findAll({where: {isActive: true}});
+
+            if (!assignedEmployees || assignedEmployees.length === 0) {
+                return res.status(400).json({ message: 'Δε βρέθηκε διαθέσιμος εργαζόμενος για τη συγκεκριμένη υπηρεσία'});
             }
-        });
-        if (existingAppointment) {
-            return res.status(400).json({message: 'Ο/Η αισθητικός δεν είναι διαθέσιμος/η αυτή την ώρα'});
-        }
+
+            //Ελέγχω εργαζομένους
+            for (const emp of assignedEmployees) {
+                const existingApp = await Appointment.findOne({
+                    where: {
+                        employeeId: emp.id,
+                        date,
+                        time,
+                        status: {[Op.not]: 'CANCELLED'}
+                    }
+                });
+
+                if (!existingApp) {
+                    employeeId =emp.id;
+                    break;
+                }
+            }
+
+                if (!employeeId) {
+                    return res.status(400).json({message: 'Όλοι οι αισθητικοί είναι απασχολημέοι τη συγκεκριμένη ώρα'})
+                } else {
+                     const existingAppointment = await Appointment.findOne({
+                         where: {
+                           employeeId,
+                           date,
+                           time,
+                           status: {[Op.not]: 'CANCELLED'}
+                        }
+                    });
+                    
+                    if (existingAppointment) {
+                        return res.status(400).json({message: 'Ο/Η αισθητικός δεν είναι διαθέσιμος/η αυτή την ώρα'});
+                    }
+                }
+
 
         //Δημιουργία ραντεβού
         const appointment = await Appointment.create({

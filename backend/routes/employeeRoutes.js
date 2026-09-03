@@ -20,6 +20,6 @@ router.get('/', getAllEmployees);
  *
  */
 
-router.get('/service/:serviceId', getEmployeesByService);
+router.get('/services/:serviceId', getEmployeesByService);
 
 module.exports = router;
