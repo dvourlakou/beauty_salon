@@ -31,9 +31,15 @@ const LoginPage = () => {
     const onSubmit = async (data: LoginFormData) => {
         setIsLoading(true);
         try {
-            await login(data.email, data.password);
+            const loggedUser = await login(data.email, data.password);
             toast.success('Καλώς ήρθατε');
-            navigate('/services');
+
+            //Έλεγχος ρόλου και αντίστοιχη ανακατεύθυνση
+            if (loggedUser?.role === 'ADMIN') {
+                navigate('/admin/dashboard');
+            } else {
+                navigate('/services');
+            }
         }
         catch (error: unknown) {
             const message = (error as AxiosError<{message: string}>).response?.data?.message || 'Δώσατε λάθος email ¨η κωδικό';
