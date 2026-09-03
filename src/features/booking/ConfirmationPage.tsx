@@ -83,7 +83,7 @@ export const ConfirmationPage = () => {
                         <div className="flex items-center gap-3">
                             <User size={18} className="text-pink-400"/>
                             <span className="text-gray-700">
-                               <strong>Αισθητικός:</strong> {data.employeeName}
+                               <strong>Αισθητικός:</strong> {data.employeeName || 'Ανατέθηκε αυτόματα'}
                             </span>
                         </div>
                     )
