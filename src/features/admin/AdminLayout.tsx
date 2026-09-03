@@ -11,9 +11,9 @@ export const AdminLayout = () => {
         navigate('/login');
     };
     const navItems =[
-        { to: '/admin', icon: LayoutDashboard, label: "Dashboard"},
-        { to: '/admin/services', icon: Scissors, label: "Υπηρεσίες"},
-        { to: '/admin/employees', icon: Users, label: "Αισθητικοί"},
+        { to: '/admin', icon: LayoutDashboard, label: "Dashboard", end: true},
+        { to: '/admin/services', icon: Scissors, label: "Υπηρεσίες", end: false},
+        { to: '/admin/employee', icon: Users, label: "Αισθητικοί", end: false},
     ];
 
     return (
