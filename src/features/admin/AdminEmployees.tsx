@@ -79,7 +79,7 @@ export const AdminEmployees = () => {
         }
         try {
             await adminApi.createEmployee(newEmployee);
-            toast.success('Η υπηρεσία προστέθηκε');
+            toast.success('Η αισθητικός προστέθηκε');
             setShowNewEmployee(false);
             setNewEmployee({name: '', specialization: ''});
             void fetchEmployees();

@@ -9,7 +9,7 @@ export const AdminServices = () => {
     const [loading,setLoading] = useState(true);
     const [editingService, setEditingService] = useState<Service | null>(null);
     const[showNewService, setShowNewService] = useState(false);
-    const [newService,setNewService] = useState({name: '', price: 0, categoryId: 0});
+    const [newService,setNewService] = useState({name: '', price: 0, durationMinutes: 30, categoryId: 0});
 
     //Φόρτωση Υπηρεσιών
     
