@@ -14,6 +14,7 @@ const seedDatabase = async () => {
         await User.create({
             name: 'Admin Salon',
             email: 'admin@salon.com',
+            phone: '2100000000',
             password: hashedPassword,
             role: 'ADMIN'
         });
@@ -27,7 +28,7 @@ const seedDatabase = async () => {
         ]);
 
         // 4.Δημιουργία Υπηρεσιών
-        await Service.bulkCreate([
+        const services = await Service.bulkCreate([
             { name: 'Μανικιούρ - Απλό', price: 18, categoryId: 1, durationMinutes: 30 },
             { name: 'Μανικιούρ - Γαλλικό', price: 20, categoryId: 1, durationMinutes: 30 },
             { name: 'Μανικιούρ - Ημιμόνιμο', price: 25, categoryId: 1, durationMinutes: 45 },
@@ -54,11 +55,12 @@ const seedDatabase = async () => {
             const  user = await User.create({
                 name: emp.name,
                 email: emp.email,
+                phone: emp.phone,
                 password: hashedPassword,
                 role: 'EMPLOYEE'
             });
 
-            const constEmployee = await Employee.create ({
+            const newEmployee = await Employee.create ({
                 name: emp.name,
                 specialization: emp.specialization,
                 userId: user.id
@@ -70,7 +72,7 @@ const seedDatabase = async () => {
         //Σύνδεση υπηρεσιών με αισθητικούς με βάση την ειδικότητα τους
         //Περιποίηση Νυχιών -- αισθητικοι 1 και 2
         const nailServices = services.filter( s => s.categoryId === categories[0].id);
-        cost nailEmployees = createdEmployees.filter(e => e.specialization === 'NAIL');
+        const nailEmployees = createdEmployees.filter(e => e.specialization === 'NAIL');
         for (const service of nailServices) {
             await service.addEmployees(nailEmployees);
         }
@@ -84,7 +86,7 @@ const seedDatabase = async () => {
 
         //Μασάζ -- αισθητικοί 5 και 6
         const massageServices = services.filter( s => s.categoryId === categories[2].id);
-        cost massageEmployees = createdEmployees.filter(e => e.specialization === 'MASSGE');
+        cost massageEmployees = createdEmployees.filter(e => e.specialization === 'MASSAGE');
         for (const service of massageServices) {
             await service.addEmployees(massageEmployees);
         }
