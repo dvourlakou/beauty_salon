@@ -13,7 +13,7 @@ const registerSchema = z.object ({
     phone: z
     .string()
     .min(10, 'Το τηλέφωνο πρέπει να έχει τουλάχιστον 10 ψηφία')
-    .regex(/^[0-9]+$/, 'Επιτρέπονται μόνο ψηφία')
+    .regex(/^[0-9]+$/, 'Επιτρέπονται μόνο ψηφία'),
     password: z.string().min(6 , "Ο κωδικός σας πρέπει να αποτελείται από τουλάχιστον 6 χαρακτήρες"),
     confirmPassword: z.string(),
 }).refine((data) => data.password === data.confirmPassword, {

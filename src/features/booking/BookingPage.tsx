@@ -107,7 +107,7 @@ export const BookingPage = () => {
             };
 
             //Αποστολή αιτήματος στο Api
-            const createAppointment = await appointmentApi.createBooking(bookingData);
+            const createdAppointment = await appointmentApi.createBooking(bookingData);
 
             toast.success('Η κράτηση ολοκληρώθηκε με επιτυχία');
 
