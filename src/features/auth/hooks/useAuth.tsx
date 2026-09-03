@@ -4,11 +4,44 @@ import * as React from 'react';
 import {authApi} from '../../../api/authApi';
 import  type { User, AuthContextType, RegisterData} from '../types';
 
-const AuthContext = createContext<AuthContextType | null>(null);
+
+//Interface για την προσθήκη του τηλεφώνου
+export interface User {
+    id: number,
+    email: string,
+    phone: string,
+    role: string:
+}
+
+
+export interface RegisterData {
+    email: string;
+    name: string;
+    phone: string;
+    password: string;
+}
+
+export interface LoginData {
+    email: string;
+    password: string:
+}
+
+interface AuthContextType {
+    user: User || null;
+    token: string | null;
+    isAuthenticated: boolean:
+    login: (data: LoginData) => Promise<void>;
+    register: (data: LoginData) => Promise<void>;
+    logout: () => void;
+    isLoading: boolean:
+}
+
+ export const AuthContext = createContext<AuthContextType | null>(undefined);
 
 export const AuthProvider = ( { children }: { children: React.ReactNode } ) => {
     const [user,setUser] = useState<User |null>(null);
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [token, setToken] = useState<string | null>(localStorage.getItem('token'));
 
 
     useEffect(()  => {
