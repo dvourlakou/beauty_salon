@@ -3,6 +3,7 @@ import type {ServiceCategory, Service} from '../features/services';
 import type {Employee} from '../features/booking';
 import type {DashboardStats, Appointment, EmployeeWorkload} from '../features/admin';
 
+
 export const adminApi = {
 
     //Dashboard
@@ -24,6 +25,20 @@ export const adminApi = {
     completeAppointment: async (id: number): Promise<void> => {
         await axiosInstance.patch(`/admin/appointments/${id}/complete`);
     },
+
+    getAllAppointments: async () => {
+        const response = await api.get('/admin/appointments');
+        return response.data;
+    },
+    updateAppointmentsStatus: async(id:number, status:string) => {
+        const response = await api.patch('/admin/appointments/${id}/status, {status}');
+        return response.data;
+    },
+    deleteAppointment: async (id:number) => {
+        const response = await api.delete('/admin/appointments/${id}');
+        return response.data;
+        
+    }
 
 
     //Services
