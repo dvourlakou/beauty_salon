@@ -21,7 +21,7 @@ const getEmployeesByService = async (req,res) => {
 
         //Αν Employee.belongsToMany(Service) τοτε
         const service = await Service.findByPk(serviceId, {
-            include: [{ model: Employee, where: { isActive: true}, required: false}]
+            include: [{ model: Employee, as: 'Employees', where: { isActive: true}, required: false}]
         });
 
         if (!service) {
