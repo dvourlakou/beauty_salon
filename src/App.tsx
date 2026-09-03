@@ -37,7 +37,7 @@ const router = createBrowserRouter([
     //Διαδρομές μόνο γιατο χρήστη admin
 
     {
-        path: '/admin', element: (<ProtectedRoute roles={ ['ADMIN']}> <AdminLayout /> </ProtectedRoute>),
+        path: '/admin', element: (<ProtectedRoute role={ ['ADMIN']}> <AdminLayout /> </ProtectedRoute>),
 
         children:[
             {index : true, element: <AdminDashboard />},

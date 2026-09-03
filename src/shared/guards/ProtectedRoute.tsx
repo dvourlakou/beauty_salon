@@ -8,11 +8,15 @@ import LoadingSpinner from '../ui/LoadingSpinner';
 interface ProtectedRouteProps {
     children: React.ReactNode;
     allowedRoles?: string[];
+    role?: string[];
 
 }
 
-export const ProtectedRoute = ({ children, allowedRoles}: ProtectedRouteProps) => {
+export const ProtectedRoute = ({ children, allowedRoles, role}: ProtectedRouteProps) => {
     const { user, isLoading} = useAuth();
+    const loaction = useLocation();
+
+    const rolestoMatch = allowedRoles || role;
 
     if (isLoading) {
         return (
@@ -28,13 +32,13 @@ export const ProtectedRoute = ({ children, allowedRoles}: ProtectedRouteProps) =
 
     //αν υπάρχουν roles όμως ο User δεν εχει κανένα απο αυτούς
 
-    if (allowedRoles && allowedRoles.length >0) {
+    if (rolestoMatch && rolestoMatch.length >0) {
         const isAllowed =  allowedRoles.includes(user.role);
 
 
 
         if (!isAllowed) {
-            console.warn(`Access denied. User role: ${user.role}, Allowed: ${allowedRoles.join(',')}`);
+            console.warn(`Access denied. User role: ${user.role}, Allowed: ${rolestoMatch.join(',')}`);
             return <Navigate to="/services" replace/>;
         }
     }
