@@ -32,6 +32,27 @@ db.Review = require('./Review')(sequelize);
 db.ServiceCategory.hasMany(db.Service, {foreignKey: 'categoryId', as: 'Services'});
 db.Service.belongsTo(db.ServiceCategory, {foreignKey: 'categoryId'});
 
+//User as Customer με Employee
+db.User.hasOne(db.Employee, {foreignKey: ' userID'});
+db.Employee.belongsTo(db.User, {foreignKey: 'userId'});
+
+//Service με Employee
+db.Service.belongsToMany(db.Employee, {
+    through: 'ServiceEmployees',
+    foreignKey: 'serviceId',
+    otherKey: 'employeeId',
+    as: 'Employees'
+});
+
+db.Employee.belongsToMany(db.Service, {
+    through: 'ServiceEmployees',
+    foreignKey: 'employeeId',
+    otherKey: 'serviceId',
+    as: 'Services'
+});
+
+
+
 //Employee με Appointment
 db.Employee.hasMany(db.Appointment, {foreignKey: 'employeeId'});
 db.Appointment.belongsTo(db.Employee, {foreignKey: 'employeeId'});
