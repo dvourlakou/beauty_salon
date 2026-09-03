@@ -5,7 +5,7 @@ const {User} = require('../models');
 //Register (εγγραφή νέου χρήστη)
 const register = async (req,res) => {
     try {
-        const {email, name, password} = req.body;
+        const {email, name, phone, password} = req.body;
 
         //έλεγχος για το αν υπάρχει ο χρήστης
         const existingUser = await User.findOne({ where: {email} });
@@ -20,6 +20,7 @@ const register = async (req,res) => {
         const user = await User.create({
             email,
             name,
+            phone,
             password: hashedPassword,
             role: 'CUSTOMER'
         });
