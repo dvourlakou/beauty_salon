@@ -19,6 +19,14 @@ module.exports =  (sequelize) => {
             type: DataTypes.BOOLEAN,
             defaultValue: true,
         },
+        userId: {
+            type: DataTypes.INTEGER,
+            allowNull: true,
+            references: {
+                model: 'Users', // ως Users λεω τον πινακα στη βαση
+                key : 'id'
+            }
+        }
     }, {
         timestamps: true,
     });
