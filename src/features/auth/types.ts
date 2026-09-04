@@ -20,3 +20,4 @@ export type RegisterData = {
     phone: string;
     password: string;
 };
+

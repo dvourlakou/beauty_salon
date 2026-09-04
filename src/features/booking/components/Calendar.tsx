@@ -11,7 +11,6 @@ interface CalendarProps {
 export const Calendar = ({
     selectedDate,
     onSelectDate,
-    minDate = new Date(),
     maxDate,
 }: CalendarProps) => {
     const [currentMonth, setCurrentMonth] = useState( new Date());

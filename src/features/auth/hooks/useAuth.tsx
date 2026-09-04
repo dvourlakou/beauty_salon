@@ -3,7 +3,7 @@
 import { useState, useEffect, createContext, useContext } from 'react';
 import * as React from 'react';
 import { authApi } from '../../../api/authApi';
-import type { User, AuthContextType, RegisterData } from '../types';
+import type { User, AuthContextType, RegisterData, } from '../types';
 
 // Δημιουργία Context με αρχική τιμή null
 export const AuthContext = createContext<AuthContextType | null>(null);
@@ -17,7 +17,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             try {
                 const token = localStorage.getItem('token');
                 if (token) {
-                    const userData = await authApi.getMe();
+                    const userData = (await authApi.getMe()) as unknown as User;
                     setUser(userData);
                 }
             } catch (error) {
@@ -34,8 +34,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const login = async (email: string, password: string) => {
         const response = await authApi.login(email, password);
         localStorage.setItem('token', response.token);
-        setUser(response.user);
-        return response.user;
+        setUser(response.user as unknown as User);
+        return response.user as unknown as User;
+
     };
 
     const register = async (data: RegisterData) => {
