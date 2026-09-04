@@ -36,7 +36,10 @@ export const AdminDashboard = () => {
     };
 
     useEffect(() => {
-        void fetchDashboardData();
+        const loadDashboardData = async () => {
+            await fetchDashboardData();
+        };
+        void loadDashboardData();
     }, []);
 
     if (loading) {
