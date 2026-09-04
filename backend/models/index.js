@@ -33,7 +33,7 @@ db.ServiceCategory.hasMany(db.Service, {foreignKey: 'categoryId', as: 'Services'
 db.Service.belongsTo(db.ServiceCategory, {foreignKey: 'categoryId'});
 
 //User as Customer με Employee
-db.User.hasOne(db.Employee, {foreignKey: 'userID'});
+db.User.hasOne(db.Employee, {foreignKey: 'userId'});
 db.Employee.belongsTo(db.User, {foreignKey: 'userId'});
 
 //Service με Employee
