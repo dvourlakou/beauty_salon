@@ -33,7 +33,7 @@ db.ServiceCategory.hasMany(db.Service, {foreignKey: 'categoryId', as: 'Services'
 db.Service.belongsTo(db.ServiceCategory, {foreignKey: 'categoryId'});
 
 //User as Customer με Employee
-db.User.hasOne(db.Employee, {foreignKey: ' userID'});
+db.User.hasOne(db.Employee, {foreignKey: 'userID'});
 db.Employee.belongsTo(db.User, {foreignKey: 'userId'});
 
 //Service με Employee
@@ -58,8 +58,8 @@ db.Employee.hasMany(db.Appointment, {foreignKey: 'employeeId'});
 db.Appointment.belongsTo(db.Employee, {foreignKey: 'employeeId'});
 
 //User as Customer με Appointment
-db.User.hasMany(db.Appointment, {foreignKey: 'customerId'});
-db.Appointment.belongsTo(db.User, {foreignKey: 'customerId'});
+db.User.hasMany(db.Appointment, {foreignKey: 'userId'});
+db.Appointment.belongsTo(db.User, {foreignKey: 'userId'});
 
 //Service με Appointment
 db.Service.hasMany(db.Appointment, {foreignKey: 'serviceId'});

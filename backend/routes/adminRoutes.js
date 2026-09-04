@@ -1,19 +1,20 @@
 const express = require('express');
 const {
-  getStats,
-  getWeeklyAppointments,
-  getEmployeeWorkload,
-  updateAppointmentStatus,
-  completeAppointment,
-  deleteAppointment,
-  getAllServices,
-  createService,
-  updateService,
-  deleteService,
-  getAllEmployees,
-  createEmployee,
-  updateEmployee,
-  deleteEmployee
+    getStats,
+    getAllAppointments,
+    getWeeklyAppointments,
+    getEmployeeWorkload,
+    updateAppointmentStatus,
+    completeAppointment,
+    deleteAppointment,
+    getAllServices,
+    createService,
+    updateService,
+    deleteService,
+    getAllEmployees,
+    createEmployee,
+    updateEmployee,
+    deleteEmployee
 } = require('../controllers/adminController');
 
 const authMiddleware = require('../middleware/auth');
@@ -59,13 +60,25 @@ router.get('/workload', getEmployeeWorkload);
  * @swagger
  * /api/admin/appointments:
  *   get:
- *     summary: Λήψη όλων των ραντεβού
+ *     summary: Λήψη όλων των ραντεβού (για τη διαχείριση ραντεβού)
  *     tags: [Admin - Appointments]
  *     responses:
  *       200:
- *         description: Λίστα ραντεβού
+ *         description: Λίστα όλων των ραντεβού
  */
-router.get('/appointments', getWeeklyAppointments);
+router.get('/appointments', getAllAppointments);
+
+/**
+ * @swagger
+ * /api/admin/appointments/weekly:
+ *   get:
+ *     summary: Λήψη εβδομαδιαίων ραντεβού
+ *     tags: [Admin - Appointments]
+ *     responses:
+ *       200:
+ *         description: Λίστα εβδομαδιαίων ραντεβού
+ */
+router.get('/appointments/weekly', getWeeklyAppointments);
 
 /**
  * @swagger

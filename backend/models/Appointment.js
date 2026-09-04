@@ -1,4 +1,4 @@
-const {DataTypes} = require('sequelize');
+const { DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
     return sequelize.define('Appointment', {
@@ -6,6 +6,30 @@ module.exports = (sequelize) => {
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true,
+        },
+        userId: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            references: {
+                model: 'Users',
+                key: 'id',
+            },
+        },
+        employeeId: {
+            type: DataTypes.INTEGER,
+            allowNull: true, // Επιτρέπουμε null αν ο πελάτης δεν διάλεξε συγκεκριμένο αισθητικό
+            references: {
+                model: 'Employees',
+                key: 'id',
+            },
+        },
+        serviceId: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            references: {
+                model: 'Services',
+                key: 'id',
+            },
         },
         date: {
             type: DataTypes.DATEONLY,
@@ -25,7 +49,7 @@ module.exports = (sequelize) => {
         },
         phone: {
             type: DataTypes.STRING,
-            allowNull: false,
+            allowNull: false, // Υποχρεωτικό πεδίο
         },
         status: {
             type: DataTypes.ENUM('PENDING', 'CONFIRMED', 'COMPLETED', 'CANCELLED'),

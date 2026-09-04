@@ -1,7 +1,9 @@
 const { User, ServiceCategory, Service, Employee, Appointment } = require('../models');
 const { Op } = require('sequelize');
 
-//1. ΣΤΑΤΙΣΤΙΚΑ DASHBOARD
+// ==========================================
+// 1. ΣΤΑΤΙΣΤΙΚΑ DASHBOARD & ΡΑΝΤΕΒΟΥ
+// ==========================================
 
 const getStats = async (req, res) => {
     try {
@@ -13,147 +15,154 @@ const getStats = async (req, res) => {
         });
 
         const sevenDaysAgo = new Date();
-        sevenDaysAgo.setDate(sevenDaysAgo.getDate() -7);
+        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
-        const thisWeek =await Appointment.count({
+        const thisWeek = await Appointment.count({
             where: {
                 createdAt: {
                     [Op.gte]: sevenDaysAgo
                 }
             }
         });
+
         const pending = await Appointment.count({
-            where: {status: 'PENDING'}
+            where: { status: 'PENDING' }
         });
 
         res.status(200).json({ total, today, thisWeek, pending });
-    }
-    catch (error) {
+    } catch (error) {
         console.error(error);
-        res.status(500).json({message: 'Παρουσιάστηκε σφάλμα κατά τη λήψη των στατιστικών'});
+        res.status(500).json({ message: 'Παρουσιάστηκε σφάλμα κατά τη λήψη των στατιστικών' });
     }
 };
 
-const getWeeklyAppointments = async (req,res) => {
+// Λήψη όλων των ραντεβού (Για τη σελίδα AdminAppointments.tsx)
+const getAllAppointments = async (req, res) => {
     try {
         const appointments = await Appointment.findAll({
             include: [
-                {model: User, attributes: ['id', 'name', 'email']},
-                {model: Employee, attributes: ['id', 'name']},
-                {model: Service, attributes: ['id', 'name', 'price']},
+                { model: User, attributes: ['id', 'name', 'email'] },
+                { model: Employee, attributes: ['id', 'name', 'specialization'] },
+                { model: Service, attributes: ['id', 'name', 'price', 'durationMinutes'] }
             ],
-            order: [[ 'date', 'ASC'], ['time', 'ASC']]
+            order: [['date', 'DESC'], ['time', 'DESC']]
         });
         res.status(200).json(appointments);
-    }
-    catch (error) {
+    } catch (error) {
         console.error(error);
-        res.status(500).json({message: 'Παρουσιάστηκε σφάλμα κατά τη λήψη των ραντεβού'});
+        res.status(500).json({ message: 'Παρουσιάστηκε σφάλμα κατά τη λήψη των ραντεβού' });
     }
 };
 
-const getEmployeeWorkload = async (req,res) => {
+const getWeeklyAppointments = async (req, res) => {
+    try {
+        const appointments = await Appointment.findAll({
+            include: [
+                { model: User, attributes: ['id', 'name', 'email'] },
+                { model: Employee, attributes: ['id', 'name'] },
+                { model: Service, attributes: ['id', 'name', 'price'] }
+            ],
+            order: [['date', 'ASC'], ['time', 'ASC']]
+        });
+        res.status(200).json(appointments);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Παρουσιάστηκε σφάλμα κατά τη λήψη των εβδομαδιαίων ραντεβού' });
+    }
+};
+
+const getEmployeeWorkload = async (req, res) => {
     try {
         const employees = await Employee.findAll({
-            include: [{ model: Appointment, as : 'appointments'}]
+            include: [{ model: Appointment, as: 'Appointments' }]
         });
 
         const workload = employees.map(emp => ({
             id: emp.id,
             name: emp.name,
-            appointmentCount: emp.appointments ? emp.appointments.length : 0
+            appointmentCount: emp.Appointments ? emp.Appointments.length : 0
         }));
         res.status(200).json(workload);
-    }
-    catch (error) {
+    } catch (error) {
         console.error(error);
-        res.status(500).json({message: 'Παρπυσιάστηκε σφάλμα κατά τη λήψη του φόρτου εργασίας'});
+        res.status(500).json({ message: 'Παρουσιάστηκε σφάλμα κατά τη λήψη του φόρτου εργασίας' });
     }
 };
 
 const updateAppointmentStatus = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { status } = req.body;
-
-    const validStatuses = ['PENDING', 'CONFIRMED', 'CANCELLED', 'COMPLETED'];
-    if (!validStatuses.includes(status)) {
-      return res.status(400).json({ message: 'Μη έγκυρη κατάσταση ραντεβού' });
-    }
-
-    const appointment = await Appointment.findByPk(id);
-    if (!appointment) {
-      return res.status(404).json({ message: 'Το ραντεβού δε βρέθηκε' });
-    }
-
-    await appointment.update({ status });
-    res.status(200).json({ message: 'Η κατάσταση του ραντεβού ενημερώθηκε επιτυχώς', appointment });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Παρουσιάστηκε σφάλμα κατά την ενημέρωση του ραντεβού' });
-  }
-};
-
-
-
-const completeAppointment = async (req,res) => {
     try {
-        const {id} =req.params;
-        const appointment = await Appointment.findByPk(id);
-        if(!appointment) {
-            return res.status(404).json({message: 'Το ραντεβού δε βρέθηκε'});
+        const { id } = req.params;
+        const { status } = req.body;
+
+        const validStatuses = ['PENDING', 'CONFIRMED', 'CANCELLED', 'COMPLETED'];
+        if (!validStatuses.includes(status)) {
+            return res.status(400).json({ message: 'Μη έγκυρη κατάσταση ραντεβού' });
         }
-        await appointment.update({ status : 'COMPLETED'});
-        res.status(200).json({message: 'Το ραντεβού ολοκληρώθηκε' });
-    }
-    catch (error) {
+
+        const appointment = await Appointment.findByPk(id);
+        if (!appointment) {
+            return res.status(404).json({ message: 'Το ραντεβού δε βρέθηκε' });
+        }
+
+        await appointment.update({ status });
+        res.status(200).json({ message: 'Η κατάσταση του ραντεβού ενημερώθηκε επιτυχώς', appointment });
+    } catch (error) {
         console.error(error);
-        res.status(500).json({message: 'Παρουσιάστηκε σφάλμα κατά την ενημέρωση ραντεβού'})
+        res.status(500).json({ message: 'Παρουσιάστηκε σφάλμα κατά την ενημέρωση του ραντεβού' });
     }
-
 };
 
+const completeAppointment = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const appointment = await Appointment.findByPk(id);
+        if (!appointment) {
+            return res.status(404).json({ message: 'Το ραντεβού δε βρέθηκε' });
+        }
+        await appointment.update({ status: 'COMPLETED' });
+        res.status(200).json({ message: 'Το ραντεβού ολοκληρώθηκε' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Παρουσιάστηκε σφάλμα κατά την ενημέρωση ραντεβού' });
+    }
+};
 
-// Διαγραφή ραντεβού
 const deleteAppointment = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const appointment = await Appointment.findByPk(id);
+    try {
+        const { id } = req.params;
+        const appointment = await Appointment.findByPk(id);
 
-    if (!appointment) {
-      return res.status(404).json({ message: 'Το ραντεβού δε βρέθηκε' });
+        if (!appointment) {
+            return res.status(404).json({ message: 'Το ραντεβού δε βρέθηκε' });
+        }
+
+        await appointment.destroy();
+        res.status(200).json({ message: 'Το ραντεβού διαγράφηκε επιτυχώς' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Παρουσιάστηκε σφάλμα κατά τη διαγραφή του ραντεβού' });
     }
-
-    await appointment.destroy();
-    res.status(200).json({ message: 'Το ραντεβού διαγράφηκε επιτυχώς' });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Παρουσιάστηκε σφάλμα κατά τη διαγραφή του ραντεβού' });
-  }
 };
 
-
-
-//2. ΔΙΑΧΕΙΡΙΣΗ ΥΠΗΡΕΣΙΩΝ (CRUD)
+// ==========================================
+// 2. ΔΙΑΧΕΙΡΙΣΗ ΥΠΗΡΕΣΙΩΝ (CRUD)
+// ==========================================
 
 const getAllServices = async (req, res) => {
     try {
-        let Service;
         const categories = await ServiceCategory.findAll({
-            include: [{ model: Service, as: 'Services'}]
+            include: [{ model: Service, as: 'Services' }]
         });
         res.status(200).json(categories);
-    }
-    catch (error) {
+    } catch (error) {
         console.error(error);
-        res.status(500).json({message: 'Παρουσιάστηκε σφάλμα κατά τη λήψη των υπηρεσιών'});
+        res.status(500).json({ message: 'Παρουσιάστηκε σφάλμα κατά τη λήψη των υπηρεσιών' });
     }
 };
 
-const createService = async (req,res) => {
+const createService = async (req, res) => {
     try {
         const { name, price, categoryId, durationMinutes, description } = req.body;
-        let Service;
         const service = await Service.create({
             name,
             price,
@@ -163,107 +172,102 @@ const createService = async (req,res) => {
             isActive: true
         });
         res.status(201).json(service);
-    }
-    catch (error) {
+    } catch (error) {
         console.error(error);
-        res.status(500).json({message: 'Παρουσιάστηκε σφάλμα κατά τη δημιουργία της υπηρεσίας'});
+        res.status(500).json({ message: 'Παρουσιάστηκε σφάλμα κατά τη δημιουργία της υπηρεσίας' });
     }
 };
 
-const updateService = async (req,res) => {
+const updateService = async (req, res) => {
     try {
-        const {id} = req.params;
-        const {name, price, durationMinutes, description, isActive} = req.body;
-        let Service;
+        const { id } = req.params;
+        const { name, price, durationMinutes, description, isActive } = req.body;
         const service = await Service.findByPk(id);
         if (!service) {
-            return res.status(404).json({message: 'Η υπηρεσία δε βρέθηκε'});
+            return res.status(404).json({ message: 'Η υπηρεσία δε βρέθηκε' });
         }
-        await service.update({name, price, durationMinutes, description, isActive});
+        await service.update({ name, price, durationMinutes, description, isActive });
         res.status(200).json(service);
-    }
-    catch (error) {
+    } catch (error) {
         console.error(error);
-        res.status(500).json({message: 'Παρουσιάστηκε σφάλμα κατά την ενημέρωση'});
+        res.status(500).json({ message: 'Παρουσιάστηκε σφάλμα κατά την ενημέρωση' });
     }
 };
 
-const deleteService = async (req,res) => {
+const deleteService = async (req, res) => {
     try {
-        const {id} = req.params;
-        let Service;
+        const { id } = req.params;
         const service = await Service.findByPk(id);
         if (!service) {
-            return res.status(404).json({message: 'Η υπηρεσία δε βρέθηκε'});
+            return res.status(404).json({ message: 'Η υπηρεσία δε βρέθηκε' });
         }
         await service.destroy();
-        res.status(200).json({message: 'Η υπηρεσία διαγράφηκε'});
-    }
-    catch (error) {
+        res.status(200).json({ message: 'Η υπηρεσία διαγράφηκε' });
+    } catch (error) {
         console.error(error);
-        res.status(500).json({message: 'Παρουσιάστηκε σφάλμα κατά τη διαγραφή'});
+        res.status(500).json({ message: 'Παρουσιάστηκε σφάλμα κατά τη διαγραφή' });
     }
 };
 
-//3. ΔΙΑΧΕΙΡΙΣΗ ΑΙΣΘΗΤΙΚΩΝ (crud)
+// ==========================================
+// 3. ΔΙΑΧΕΙΡΙΣΗ ΑΙΣΘΗΤΙΚΩΝ (CRUD)
+// ==========================================
 
-const getAllEmployees = async (req,res) => {
+const getAllEmployees = async (req, res) => {
     try {
         const employees = await Employee.findAll();
         res.status(200).json(employees);
-    }
-    catch (error) {
-        res.status(500).json({message: 'Παρουσιάστηκε σφάλμα κτά τη λήψη αισθητικών'});
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Παρουσιάστηκε σφάλμα κατά τη λήψη αισθητικών' });
     }
 };
 
-const createEmployee = async (req,res) => {
+const createEmployee = async (req, res) => {
     try {
-        const {name, specialization} = req.body;
+        const { name, specialization } = req.body;
         const employee = await Employee.create({ name, specialization, isActive: true });
         res.status(201).json(employee);
-    }
-    catch (error) {
+    } catch (error) {
         console.error(error);
-        res.status(500).json({message: 'Παρουσιάστηκε σφάλμα κατά τη δημιουργία αισθητικού'});
+        res.status(500).json({ message: 'Παρουσιάστηκε σφάλμα κατά τη δημιουργία αισθητικού' });
     }
 };
 
-const updateEmployee = async (req,res) => {
+const updateEmployee = async (req, res) => {
     try {
-        const {id} = req.params;
-        const {name,specialization,isActive} = req.body;
+        const { id } = req.params;
+        const { name, specialization, isActive } = req.body;
         const employee = await Employee.findByPk(id);
         if (!employee) {
-            return res.status(404).json({message: 'Ο/Η αισθητικός δε βρέθηκε'});
+            return res.status(404).json({ message: 'Ο/Η αισθητικός δε βρέθηκε' });
         }
-        await employee.update({ name,specialization,isActive });
+        await employee.update({ name, specialization, isActive });
         res.status(200).json(employee);
-    }
-    catch (error) {
+    } catch (error) {
         console.error(error);
-        res.status(500).json({message: 'Παρουσιάστηκε σφάλμα κατά την ενημέρωση'});
+        res.status(500).json({ message: 'Παρουσιάστηκε σφάλμα κατά την ενημέρωση' });
     }
 };
 
-const deleteEmployee = async (req,res) => {
+const deleteEmployee = async (req, res) => {
     try {
-        const {id} = req.params;
+        const { id } = req.params;
         const employee = await Employee.findByPk(id);
         if (!employee) {
-            return res.status(404).json({message: 'Ο/Η αισθητικός δε βρέθηκε'});
+            return res.status(404).json({ message: 'Ο/Η αισθητικός δε βρέθηκε' });
         }
         await employee.destroy();
-        return res.status(200).json({message: 'Ο/Η αισθητικός διαγράφηκε'});
-    }
-    catch (error) {
+        return res.status(200).json({ message: 'Ο/Η αισθητικός διαγράφηκε' });
+    } catch (error) {
         console.error(error);
-        res.status(500).json({message: 'Παρουσιάστηκε σφάλμα κατά τη διαγραφή'});
+        res.status(500).json({ message: 'Παρουσιάστηκε σφάλμα κατά τη διαγραφή' });
     }
 };
 
 module.exports = {
     getStats,
+    getAllAppointments,
     getWeeklyAppointments,
     getEmployeeWorkload,
     updateAppointmentStatus,
@@ -278,6 +282,3 @@ module.exports = {
     updateEmployee,
     deleteEmployee
 };
-
-
-
