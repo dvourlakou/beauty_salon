@@ -35,8 +35,10 @@ export const AdminEmployees = () => {
     };
 
     useEffect(() => {
-        //eslint-disable-next-line react-hooks/set-state-in-effect
-        void fetchEmployees();
+        const loadEmployeeData = async () => {
+            await fetchEmployees();
+        };
+        void loadEmployeeData();
     },[]);
 
     //Διαγραφή Αισθητικού
