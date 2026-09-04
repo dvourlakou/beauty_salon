@@ -27,8 +27,10 @@ export const AdminServices = () => {
     };
 
     useEffect(() => {
-        //eslint-disable-next-line react-hooks/set-state-in-effect
-         void fetchServices();
+        const loadServices = async () => {
+            await fetchServices();
+        };
+        void loadServices();
     },[]);
 
     //Διαγραφή Υπηρεσιών
@@ -75,7 +77,7 @@ export const AdminServices = () => {
             await adminApi.createService(newService);
             toast.success('Η υπηρεσία προστέθηκε');
             setShowNewService(false);
-            setNewService({name: '', price: 0, categoryId: 0});
+            setNewService({name: '', price: 0, categoryId: 0,durationMinutes: 0});
             void fetchServices();
         } catch (error) {
             toast.error((error as Error).message ||'Αποτυχία προσθήκης');
