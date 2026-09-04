@@ -1,19 +1,8 @@
 import { useState, useEffect } from 'react';
-import { Calendar, Clock, User, Phone, CheckCircle, XCircle, Trash2, Filter, AlertCircle } from 'lucide-react';
+import { Calendar, Clock, User as UserIcon, CheckCircle, Trash2, Filter, AlertCircle, Mail, DollarSign } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { adminApi } from '../../api/adminApi';
-
-export interface Appointment {
-    id: number;
-    clientName: string;
-    clientPhone: string;
-    clientEmail: string;
-    serviceName: string;
-    employeeName: string;
-    appointmentDate: string;
-    appointmentTime?: string;
-    status: 'PENDING' | 'CONFIRMED' | 'CANCELLED' | 'COMPLETED';
-}
+import { Appointment } from '../../types'; // Εισαγωγή του Appointment από το κεντρικό types αρχείο
 
 export const AdminAppointments = () => {
     const [appointments, setAppointments] = useState<Appointment[]>([]);
@@ -131,38 +120,48 @@ export const AdminAppointments = () => {
                             <tbody className="divide-y divide-gray-100 text-sm">
                                 {filteredAppointments.map((app) => (
                                     <tr key={app.id} className="hover:bg-gray-50 transition-colors">
-                                        {/* Πελάτης */}
+                                        {/* Πελάτης (από app.User) */}
                                         <td className="py-3 px-4">
                                             <div className="font-semibold text-gray-800 flex items-center gap-1">
-                                                <User size={14} className="text-gray-400" />
-                                                {app.clientName}
+                                                <UserIcon size={14} className="text-gray-400" />
+                                                {app.User?.name || '—'}
                                             </div>
-                                            <div className="text-xs text-gray-500 flex items-center gap-1 mt-0.5">
-                                                <Phone size={12} className="text-gray-400" />
-                                                {app.clientPhone}
-                                            </div>
+                                            {app.User?.email && (
+                                                <div className="text-xs text-gray-500 flex items-center gap-1 mt-0.5">
+                                                    <Mail size={12} className="text-gray-400" />
+                                                    {app.User.email}
+                                                </div>
+                                            )}
                                         </td>
 
-                                        {/* Υπηρεσία */}
-                                        <td className="py-3 px-4 font-medium text-gray-700">
-                                            {app.serviceName}
+                                        {/* Υπηρεσία (από app.Service) */}
+                                        <td className="py-3 px-4">
+                                            <div className="font-medium text-gray-700">
+                                                {app.Service?.name || '—'}
+                                            </div>
+                                            {app.Service?.price !== undefined && (
+                                                <div className="text-xs text-gray-500 flex items-center gap-0.5 mt-0.5">
+                                                    <DollarSign size={12} className="text-gray-400" />
+                                                    <span>{app.Service.price} €</span>
+                                                </div>
+                                            )}
                                         </td>
 
-                                        {/* Αισθητικός */}
+                                        {/* Αισθητικός (από app.Employee) */}
                                         <td className="py-3 px-4 text-gray-600">
-                                            {app.employeeName || 'Όποιος είναι διαθέσιμος'}
+                                            {app.Employee?.name || 'Όποιος είναι διαθέσιμος'}
                                         </td>
 
-                                        {/* Ημερομηνία & Ώρα */}
+                                        {/* Ημερομηνία & Ώρα (από app.date και app.time) */}
                                         <td className="py-3 px-4">
                                             <div className="flex items-center gap-1 text-gray-700">
                                                 <Calendar size={14} className="text-pink-400" />
-                                                <span>{app.appointmentDate}</span>
+                                                <span>{app.date}</span>
                                             </div>
-                                            {app.appointmentTime && (
+                                            {app.time && (
                                                 <div className="flex items-center gap-1 text-xs text-gray-500 mt-0.5">
                                                     <Clock size={12} className="text-gray-400" />
-                                                    <span>{app.appointmentTime}</span>
+                                                    <span>{app.time}</span>
                                                 </div>
                                             )}
                                         </td>
@@ -200,15 +199,6 @@ export const AdminAppointments = () => {
                                                         className="p-1.5 text-amber-600 hover:bg-amber-50 rounded-lg transition-colors cursor-pointer"
                                                     >
                                                         <AlertCircle size={18} />
-                                                    </button>
-                                                )}
-                                                {app.status !== 'CANCELLED' && (
-                                                    <button
-                                                        onClick={() => handleStatusChange(app.id, 'CANCELLED')}
-                                                        title="Ακύρωση ραντεβού"
-                                                        className="p-1.5 text-orange-500 hover:bg-orange-50 rounded-lg transition-colors cursor-pointer"
-                                                    >
-                                                        <XCircle size={18} />
                                                     </button>
                                                 )}
                                                 <button
