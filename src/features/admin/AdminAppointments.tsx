@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Calendar, Clock, User as UserIcon, CheckCircle, Trash2, Filter, AlertCircle, Mail, DollarSign } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { adminApi } from '../../api/adminApi';
-import { Appointment } from '../../types'; // Εισαγωγή του Appointment από το κεντρικό types αρχείο
+import type {Appointment} from './types';
 
 export const AdminAppointments = () => {
     const [appointments, setAppointments] = useState<Appointment[]>([]);

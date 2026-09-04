@@ -58,3 +58,4 @@ export const TimeSlots = ({ slots, selectedTime, onSelectedTime }: TimeSlotsProp
         </div>
     );
 };
+

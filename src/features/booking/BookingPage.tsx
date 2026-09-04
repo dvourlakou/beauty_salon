@@ -1,7 +1,7 @@
 import {useState, useEffect} from 'react';
 import { useNavigate, useSearchParams } from "react-router";
 import {Calendar} from './components/Calendar';
-import { TimeSlots} from "./components/TimeSlots.tsx";
+import {TimeSlots} from "./components/ΤimeSlots.tsx";
 import {SelectEmployee} from "./components/SelectEmployee.tsx";
 import {BookingSummary} from "./components/BookingSummary.tsx";
 import type{ Service , Employee ,BookingDetails } from './types.ts';
@@ -10,6 +10,7 @@ import toast from 'react-hot-toast';
 import {serviceApi} from "../../api/serviceApi.ts";
 import {appointmentApi} from "../../api/appointmentApi.ts";
 import {useAuth} from "../auth";
+import type {Appointment} from "../admin";
 
 const  formatDateToLocalString = (date: Date): string => {
     const year = date.getFullYear();
@@ -107,7 +108,7 @@ export const BookingPage = () => {
             };
 
             //Αποστολή αιτήματος στο Api
-            const createdAppointment = await appointmentApi.createBooking(bookingData);
+            const createdAppointment = (await appointmentApi.createBooking(bookingData)) as unknown as Appointment;
 
             toast.success('Η κράτηση ολοκληρώθηκε με επιτυχία');
 
@@ -118,7 +119,7 @@ export const BookingPage = () => {
                     serviceName: service.name,
                     date: bookingData.date,
                     time: bookingData.time,
-                    employeeName: createdAppointment?.Employee?.name || employees.find(e => e.id === selectedEmployee)?.name,
+                    employeeName: createdAppointment?.Employee?.name || employees.find(e => e.id === selectedEmployee)?.name || 'Δεν επιλέχθηκε',
                     price: service.price,
                     email: user?.email || 'Δε δηλώθηκε email',
                 }
