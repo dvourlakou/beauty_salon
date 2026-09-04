@@ -22,7 +22,10 @@ export const AdminAppointments = () => {
     };
 
     useEffect(() => {
-        void fetchAppointments();
+        const loadData = async () => {
+            await fetchAppointments();
+        };
+        void loadData();
     }, []);
 
     // Αλλαγή κατάστασης ραντεβού
@@ -134,7 +137,7 @@ export const AdminAppointments = () => {
                                             )}
                                         </td>
 
-                                        {/* Υπηρεσία (από app.Service) */}
+                                        {/* Υπηρeία */}
                                         <td className="py-3 px-4">
                                             <div className="font-medium text-gray-700">
                                                 {app.Service?.name || '—'}
@@ -147,12 +150,12 @@ export const AdminAppointments = () => {
                                             )}
                                         </td>
 
-                                        {/* Αισθητικός (από app.Employee) */}
+                                        {/* Αισθητικός  */}
                                         <td className="py-3 px-4 text-gray-600">
                                             {app.Employee?.name || 'Όποιος είναι διαθέσιμος'}
                                         </td>
 
-                                        {/* Ημερομηνία & Ώρα (από app.date και app.time) */}
+                                        {/* Ημερομηνία , Ώρα */}
                                         <td className="py-3 px-4">
                                             <div className="flex items-center gap-1 text-gray-700">
                                                 <Calendar size={14} className="text-pink-400" />
