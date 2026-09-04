@@ -71,6 +71,31 @@ const getEmployeeWorkload = async (req,res) => {
     }
 };
 
+const updateAppointmentStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    const validStatuses = ['PENDING', 'CONFIRMED', 'CANCELLED', 'COMPLETED'];
+    if (!validStatuses.includes(status)) {
+      return res.status(400).json({ message: 'Μη έγκυρη κατάσταση ραντεβού' });
+    }
+
+    const appointment = await Appointment.findByPk(id);
+    if (!appointment) {
+      return res.status(404).json({ message: 'Το ραντεβού δε βρέθηκε' });
+    }
+
+    await appointment.update({ status });
+    res.status(200).json({ message: 'Η κατάσταση του ραντεβού ενημερώθηκε επιτυχώς', appointment });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Παρουσιάστηκε σφάλμα κατά την ενημέρωση του ραντεβού' });
+  }
+};
+
+
+
 const completeAppointment = async (req,res) => {
     try {
         const {id} =req.params;
@@ -87,6 +112,27 @@ const completeAppointment = async (req,res) => {
     }
 
 };
+
+
+// Διαγραφή ραντεβού
+const deleteAppointment = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const appointment = await Appointment.findByPk(id);
+
+    if (!appointment) {
+      return res.status(404).json({ message: 'Το ραντεβού δε βρέθηκε' });
+    }
+
+    await appointment.destroy();
+    res.status(200).json({ message: 'Το ραντεβού διαγράφηκε επιτυχώς' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Παρουσιάστηκε σφάλμα κατά τη διαγραφή του ραντεβού' });
+  }
+};
+
+
 
 //2. ΔΙΑΧΕΙΡΙΣΗ ΥΠΗΡΕΣΙΩΝ (CRUD)
 
@@ -220,7 +266,9 @@ module.exports = {
     getStats,
     getWeeklyAppointments,
     getEmployeeWorkload,
+    updateAppointmentStatus,
     completeAppointment,
+    deleteAppointment,
     getAllServices,
     createService,
     updateService,
