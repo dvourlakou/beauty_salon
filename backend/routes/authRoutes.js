@@ -18,6 +18,7 @@ const router = express.Router();
  *             required:
  *               - email
  *               - name
+ *               - phone
  *               - password
  *             properties:
  *               email:
@@ -50,8 +51,8 @@ router.post('/register', register);
  *           schema:
  *             type: object
  *             required:
- *               - email:
- *               - password:
+ *               - email
+ *               - password
  *             properties:
  *               email:
  *                 type: string
