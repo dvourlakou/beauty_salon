@@ -24,49 +24,47 @@ db.ServiceCategory = require('./ServiceCategory')(sequelize);
 db.Service = require('./Service')(sequelize);
 db.Employee = require('./Employee')(sequelize);
 db.Appointment = require('./Appointment')(sequelize);
-db.Review = require('./Review')(sequelize);
+
 
 //Σχέσεις μεταξύ των πινάκων
 
 //ServiceCategory με Service
-db.ServiceCategory.hasMany(db.Service, {foreignKey: 'categoryId', as: 'Services'});
-db.Service.belongsTo(db.ServiceCategory, {foreignKey: 'categoryId'});
+db.ServiceCategory.hasMany(db.Service, {foreignKey: 'categoryId', as: 'services'});
+db.Service.belongsTo(db.ServiceCategory, {foreignKey: 'categoryId', as: 'category' });
 
-//User as Customer με Employee
-db.User.hasOne(db.Employee, {foreignKey: 'userId'});
-db.Employee.belongsTo(db.User, {foreignKey: 'userId'});
+//User με Employee
+db.User.hasOne(db.Employee, {foreignKey: 'userId',as: 'employeeProfile', onDelete: 'CASCADE'});
+db.Employee.belongsTo(db.User, {foreignKey: 'userId', as: 'user'});
 
 //Service με Employee
 db.Service.belongsToMany(db.Employee, {
-    through: 'ServiceEmployees',
+    through: 'EmployeeServices',
     foreignKey: 'serviceId',
     otherKey: 'employeeId',
-    as: 'Employees'
+    as: 'employees'
 });
 
 db.Employee.belongsToMany(db.Service, {
-    through: 'ServiceEmployees',
+    through: 'EmployeeServices',
     foreignKey: 'employeeId',
     otherKey: 'serviceId',
-    as: 'Services'
+    as: 'services'
 });
 
 
 
 //Employee με Appointment
-db.Employee.hasMany(db.Appointment, {foreignKey: 'employeeId'});
-db.Appointment.belongsTo(db.Employee, {foreignKey: 'employeeId'});
+db.Employee.hasMany(db.Appointment, {foreignKey: 'employeeId', as: 'appointments'});
+db.Appointment.belongsTo(db.Employee, {foreignKey: 'employeeId', as: 'employee'});
 
-//User as Customer με Appointment
-db.User.hasMany(db.Appointment, {foreignKey: 'userId'});
-db.Appointment.belongsTo(db.User, {foreignKey: 'userId'});
+//User  με Appointment
+db.User.hasMany(db.Appointment, {foreignKey: 'userId', as: 'appointments'});
+db.Appointment.belongsTo(db.User, {foreignKey: 'userId', as: 'customer'});
 
 //Service με Appointment
-db.Service.hasMany(db.Appointment, {foreignKey: 'serviceId'});
-db.Appointment.belongsTo(db.Service, {foreignKey: 'serviceId'});
+db.Service.hasMany(db.Appointment, {foreignKey: 'serviceId', as: 'appointments'});
+db.Appointment.belongsTo(db.Service, {foreignKey: 'serviceId', as: 'service'});
 
-//Appointment με  Review 1to1
-db.Appointment.hasOne(db.Review, {foreignKey: 'appointmentId'});
-db.Review.belongsTo(db.Appointment, {foreignKey: 'appointmentId'});
+
 
 module.exports = db;
