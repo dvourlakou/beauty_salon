@@ -18,7 +18,7 @@ const getAvailableSlots = async (req,res) => {
         const whereClause = {
                 serviceId,
                 date,
-                status: {[Op.not]: 'CANCELLED'}
+                status: { [Op.not] : 'CANCELLED'}
         };
         
         //Αν ο χρήστης επιλέξει συγκεκριμένο υπάλληλο
@@ -36,14 +36,19 @@ const getAvailableSlots = async (req,res) => {
         let bookedTimes = [];
 
         if (employeeId) {
-            bookedTimes = bookedAppointments.map(app > app.time);
+            bookedTimes = bookedAppointments.map(app => app.time);
         } else {
             const service = await Service.findByPk(serviceId, {
-                include: [{model: Employee, as: 'Employees', where: {isActive:true}, required: false}]
+                include: [{
+                    model: Employee,
+                    as: 'employees',
+                    where: {isActive:true},
+                    required: false
+                }]
             });
-            const totalEmployees = (service && service.Employees) ? service.Employees.length : 2;
+            const totalEmployees = (service && service.employees) ? service.employees.length : 2;
             
-            cosnt timeCounts = {};
+            const timeCounts = {};
             bookedAppointments.forEach(app => {
                 timeCounts[app.time] = (timeCounts[app.time] || 0) + 1 ;
             });
@@ -66,13 +71,12 @@ const getAvailableSlots = async (req,res) => {
 const createAppointment = async (req,res) => {
     try {
         let {serviceId, employeeId, date, time, notes} = req.body;
-        const customerId = req.user.id; // από το auth middleware
+        const customerId = req.user.id;
 
-        //Βρίσκω την υπηρεσία για να δω αντίστοιχη τιμή και διάρκεια
-        const service = await Service.findByPk(serviceId , {
+        const service = await Service.findByPk(serviceId, {
             include: [{
                 model: Employee,
-                as: 'Employees',
+                as: 'employees',
                 where: {isActive: true},
                 through: {attributes: []},
                 required: false
@@ -83,12 +87,12 @@ const createAppointment = async (req,res) => {
             return res.status(404).json({message: 'Η υπηρεσία δε βρέθηκε'});
         }
 
-        //Αυτόματη ανάθεση αν το employeeId είναι null / undefined
+
         if (!employeeId) {
-            const assignedEmployees = service.Employees || await Employee.findAll({where: {isActive: true}});
+            const assignedEmployees = service.employees || await Employee.findAll({where: {isActive: true}});
 
             if (!assignedEmployees || assignedEmployees.length === 0) {
-                return res.status(400).json({ message: 'Δε βρέθηκε διαθέσιμος εργαζόμενος για τη συγκεκριμένη υπηρεσία'});
+                return res.status(400).json({message: 'Δε βρέθηκε διαθέσιμος εργαζόμενος για τη συγκεκριμένη υπηρεσία'});
             }
 
             //Ελέγχω εργαζομένους
@@ -103,52 +107,58 @@ const createAppointment = async (req,res) => {
                 });
 
                 if (!existingApp) {
-                    employeeId =emp.id;
+                    employeeId = emp.id;
                     break;
                 }
             }
 
-                if (!employeeId) {
-                    return res.status(400).json({message: 'Όλοι οι αισθητικοί είναι απασχολημέοι τη συγκεκριμένη ώρα'})
-                } else {
-                     const existingAppointment = await Appointment.findOne({
-                         where: {
-                           employeeId,
-                           date,
-                           time,
-                           status: {[Op.not]: 'CANCELLED'}
-                        }
-                    });
-                    
-                    if (existingAppointment) {
-                        return res.status(400).json({message: 'Ο/Η αισθητικός δεν είναι διαθέσιμος/η αυτή την ώρα'});
+            if (!employeeId) {
+                return res.status(400).json({message: 'Όλοι οι αισθητικοί είναι απασχολημέοι τη συγκεκριμένη ώρα'})
+            } else {
+                const existingAppointment = await Appointment.findOne({
+                    where: {
+                        employeeId,
+                        date,
+                        time,
+                        status: {[Op.not]: 'CANCELLED'}
                     }
+                });
+
+                if (existingAppointment) {
+                    return res.status(400).json({message: 'Ο/Η αισθητικός δεν είναι διαθέσιμος/η αυτή την ώρα'});
                 }
+            }
+
+            const user = await User.findByPk(userId);
 
 
-        //Δημιουργία ραντεβού
-        const appointment = await Appointment.create({
-            customerId,
-            serviceId,
-            employeeId,
-            date,
-            time,
-            durationMinutes: service.durationMinutes || 30,
-            price: service.price,
-            notes,
-            status: 'PENDING',
-        });
+            //Δημιουργία ραντεβού
+            const appointment = await Appointment.create({
+                userId,
+                customerName: user ? user.name : '',
+                customerEmail: user ? user.email : '',
+                phone: user ? user.phone : '',
+                serviceId,
+                employeeId,
+                date,
+                time,
+                durationMinutes: service.durationMinutes || 30,
+                price: service.price,
+                notes,
+                status: 'PENDING',
+            });
 
-        //Φόρτωση των δεδομένων για την απάντηση
-        const appointmentWithDetails = await Appointment.findByPk(appointment.id, {
-            include: [
-                {model: Service},
-                {model: Employee},
-                {model: User, as: 'Customer'},
-            ]
-        });
+            //Φόρτωση των δεδομένων για την απάντηση
+            const appointmentWithDetails = await Appointment.findByPk(appointment.id, {
+                include: [
+                    {model: Service, as: 'service'},
+                    {model: Employee, as: 'employee'},
+                    {model: User, as: 'customer', attributes: ['id', 'name', 'email', 'phone']},
+                ]
+            });
 
-        res.status(201).json(appointmentWithDetails);
+            res.status(201).json(appointmentWithDetails);
+        }
     }
     catch (error) {
         console.error(error);
@@ -159,12 +169,12 @@ const createAppointment = async (req,res) => {
 //Λήψη ραντεβού για χρήστη που είναι συνδεδεμένος
 const getMyAppointment = async (req,res) => {
     try {
-        const customerId =req.user.id;
+        const userId =req.user.id;
         const appointments = await Appointment.findAll({
-            where: {customerId},
+            where: {userId},
             include: [
-                {model:Service},
-                {model:Employee},
+                {model:Service,as :'service'},
+                {model:Employee,as:'employee'},
             ],
             order: [['date', 'DESC']],
         });
