@@ -16,7 +16,7 @@ interface ConfirmationData {
 export const ConfirmationPage = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const data = location.state as ConfirmationData;
+    const data = location.state  as ConfirmationData;
 
     //αν δεν υφίστανται data, redirect στις υπηρεσίες
     useEffect(() => {

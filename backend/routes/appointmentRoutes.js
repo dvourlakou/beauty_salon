@@ -10,19 +10,19 @@ const router = express.Router();
  *   get:
  *     summary: Λήψη διαθέσιμων ωρών για συγκεκριμένη υπηρεσία και ημερομηνία
  *     parameters:
- *       - in: query
- *         name: serviceId
- *         required: true
- *         schema:
- *           type: integer
- *       - in: query
- *         name: date
- *         required: true
- *         schema:
- *           type: string
- *      responses:
- *        200:
- *          description: Λίστα διαθέσιμων slots
+ *        - in: query
+ *          name: serviceId
+ *          required: true
+ *          schema:
+ *            type: integer
+ *        - in: query
+ *          name: date
+ *          required: true
+ *          schema:
+ *            type: string
+ *     responses:
+ *       200:
+ *         description: Λίστα διαθέσιμων slots
  */
 
 router.get('/slots', getAvailableSlots);

@@ -116,11 +116,11 @@ export const BookingPage = () => {
             //πλοήγηση στη σελίδα επιβεβαίωσης κράτησης με το email του χρήστη
             navigate('/confirmation' , {
                 state: {
-                    serviceName: service.name,
-                    date: bookingData.date,
-                    time: bookingData.time,
-                    employeeName: createdAppointment?.employee?.name || employees.find(e => e.id === selectedEmployee)?.name || 'Δεν επιλέχθηκε',
-                    price: service.price,
+                    serviceName: service?.name,
+                    date: bookingData?.date,
+                    time: bookingData?.time,
+                    employeeName: createdAppointment?.employee?.name || employees?.find(e => e.id === bookingData?.employeeId)?.name || 'Οποιοσδήποτε',
+                    price: service?.price || 0,
                     email: user?.email || 'Δε δηλώθηκε email',
                 }
             });
