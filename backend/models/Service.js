@@ -25,6 +25,16 @@ module.exports = (sequelize) => {
         type: DataTypes.BOOLEAN,
         defaultValue: true,
     },
+        categoryId: {
+        type: DataTypes.INTEGER,
+            allowNull: false,
+            references: {
+            model: 'ServiceCategories',
+                key:'id',
+            },
+
+        },
+
 }, {
     timestamps: true,
 });

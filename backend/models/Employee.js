@@ -23,7 +23,7 @@ module.exports =  (sequelize) => {
             type: DataTypes.INTEGER,
             allowNull: true,
             references: {
-                model: 'Users', // ως Users λεω τον πινακα στη βαση
+                model: 'Users',
                 key : 'id'
             }
         }
