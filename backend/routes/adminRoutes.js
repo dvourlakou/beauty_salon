@@ -22,9 +22,8 @@ const { isAdmin } = require('../middleware/roleCheck');
 
 const router = express.Router();
 
-// Προστασία όλων των admin routes
-// router.use(authMiddleware);
-// router.use(isAdmin);
+router.use(authMiddleware);
+router.use(isAdmin);
 
 /**
  * @swagger
@@ -32,9 +31,13 @@ const router = express.Router();
  *   get:
  *     summary: Λήψη στατιστικών για το dashboard
  *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: Στατιστικά dashboard
+ *       401:
+ *         description: Μη εξουσιοδοτημένη πρόσβαση
  *       403:
  *         description: Απαιτείται ρόλος admin
  */
@@ -44,24 +47,27 @@ router.get('/stats', getStats);
  * @swagger
  * /api/admin/workload:
  *   get:
- *     summary: Λήψη φόρτου εργασίας αισθητικών
+ *     summary: Λήψη προγράμματος αισθητικών
  *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: Επιτυχής επιστροφή φόρτου εργασίας
+ *         description: Επιτυχής επιστροφή προγραμματος
  */
 router.get('/workload', getEmployeeWorkload);
 
-// ==========================================
-// APPOINTMENTS (Ραντεβού)
-// ==========================================
+
+// Ραντεβού
 
 /**
  * @swagger
  * /api/admin/appointments:
  *   get:
- *     summary: Λήψη όλων των ραντεβού (για τη διαχείριση ραντεβού)
+ *     summary: Λήψη όλων των ραντεβού
  *     tags: [Admin - Appointments]
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: Λίστα όλων των ραντεβού
@@ -74,6 +80,8 @@ router.get('/appointments', getAllAppointments);
  *   get:
  *     summary: Λήψη εβδομαδιαίων ραντεβού
  *     tags: [Admin - Appointments]
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: Λίστα εβδομαδιαίων ραντεβού
@@ -84,8 +92,10 @@ router.get('/appointments/weekly', getWeeklyAppointments);
  * @swagger
  * /api/admin/appointments/{id}/status:
  *   patch:
- *     summary: Ενημέρωση κατάστασης ραντεβού (PENDING, CONFIRMED, CANCELLED, COMPLETED)
+ *     summary: Ενημέρωση κατάστασης ραντεβού
  *     tags: [Admin - Appointments]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -114,8 +124,10 @@ router.patch('/appointments/:id/status', updateAppointmentStatus);
  * @swagger
  * /api/admin/appointments/{id}/complete:
  *   patch:
- *     summary: Ολοκλήρωση ραντεβού (shortcut)
+ *     summary: Ολοκλήρωση ραντεβού
  *     tags: [Admin - Appointments]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -134,6 +146,8 @@ router.patch('/appointments/:id/complete', completeAppointment);
  *   delete:
  *     summary: Διαγραφή ραντεβού
  *     tags: [Admin - Appointments]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -146,16 +160,17 @@ router.patch('/appointments/:id/complete', completeAppointment);
  */
 router.delete('/appointments/:id', deleteAppointment);
 
-// ==========================================
-// SERVICES (Υπηρεσίες)
-// ==========================================
+//Υπηρεσίες
+
 
 /**
  * @swagger
  * /api/admin/services:
  *   get:
- *     summary: Λήψη όλων των υπηρεσιών (admin)
+ *     summary: Λήψη όλων των υπηρεσιών
  *     tags: [Admin - Services]
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: Λίστα υπηρεσιών
@@ -166,8 +181,10 @@ router.get('/services', getAllServices);
  * @swagger
  * /api/admin/services:
  *   post:
- *     summary: Δημιουργία νέας υπηρεσίας (admin)
+ *     summary: Δημιουργία  υπηρεσίας
  *     tags: [Admin - Services]
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -197,8 +214,10 @@ router.post('/services', createService);
  * @swagger
  * /api/admin/services/{id}:
  *   put:
- *     summary: Ενημέρωση μιας υπηρεσίας (admin)
+ *     summary: Ενημέρωση υπηρεσίας
  *     tags: [Admin - Services]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -221,8 +240,10 @@ router.put('/services/:id', updateService);
  * @swagger
  * /api/admin/services/{id}:
  *   delete:
- *     summary: Διαγραφή μιας υπηρεσίας (admin)
+ *     summary: Διαγραφή υπηρεσίας
  *     tags: [Admin - Services]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -235,16 +256,18 @@ router.put('/services/:id', updateService);
  */
 router.delete('/services/:id', deleteService);
 
-// ==========================================
-// EMPLOYEES (Αισθητικοί)
-// ==========================================
+
+// Αισθητικοί
+
 
 /**
  * @swagger
  * /api/admin/employees:
  *   get:
- *     summary: Λήψη όλων των αισθητικών (admin)
+ *     summary: Λήψη όλων των αισθητικών
  *     tags: [Admin - Employees]
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: Λίστα αισθητικών
@@ -255,8 +278,10 @@ router.get('/employees', getAllEmployees);
  * @swagger
  * /api/admin/employees:
  *   post:
- *     summary: Δημιουργία νέου αισθητικού (admin)
+ *     summary: Δημιουργία  αισθητικού
  *     tags: [Admin - Employees]
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -271,7 +296,6 @@ router.get('/employees', getAllEmployees);
  *                 type: string
  *               specialization:
  *                 type: string
- *                 enum: [NAIL, WAXING, MASSAGE]
  *     responses:
  *       201:
  *         description: Η αισθητικός δημιουργήθηκε
@@ -282,8 +306,10 @@ router.post('/employees', createEmployee);
  * @swagger
  * /api/admin/employees/{id}:
  *   put:
- *     summary: Ενημέρωση μιας αισθητικού (admin)
+ *     summary: Ενημέρωση αισθητικού
  *     tags: [Admin - Employees]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -306,8 +332,10 @@ router.put('/employees/:id', updateEmployee);
  * @swagger
  * /api/admin/employees/{id}:
  *   delete:
- *     summary: Διαγραφή μιας αισθητικού (admin)
+ *     summary: Διαγραφή αισθητικού
  *     tags: [Admin - Employees]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
