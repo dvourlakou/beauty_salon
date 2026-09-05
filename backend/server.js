@@ -4,6 +4,8 @@ require('dotenv').config({path: path.join(__dirname, '.env')});
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpecs = require('./swagger');
 const { sequelize } = require('./models');
 
 //import routes
@@ -12,8 +14,7 @@ const serviceRoutes = require('./routes/serviceRoutes');
 const appointmentRoutes = require('./routes/appointmentRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const employeeRoutes = require('./routes/employeeRoutes');
-const swaggerUi = require('swagger-ui-express');
-const swaggerSpecs = require('./swagger');
+
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -27,7 +28,6 @@ app.use('/api/auth', authRoutes);
 app.use('/api/services',serviceRoutes);
 app.use('/api/appointments', appointmentRoutes);
 app.use('/api/admin', adminRoutes);
-app.use('/api-docs', swaggerUi.serve);
 app.use('/api/employees', employeeRoutes);
 
 app.get('/api-docs', swaggerUi.setup(swaggerSpecs));
