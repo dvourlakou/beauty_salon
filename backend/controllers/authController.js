@@ -22,7 +22,7 @@ const register = async (req,res) => {
             name,
             phone,
             password: hashedPassword,
-            role: 'CUSTOMER'
+            role: 'USER'
         });
 
         //απάντηση χωρίς τον κωδικό

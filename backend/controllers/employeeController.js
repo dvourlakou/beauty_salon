@@ -1,10 +1,15 @@
-const {Employee, Service} = require('../models');
+const {Employee, Service, User} = require('../models');
 
-//Λήψη των ενεργών υπαλλήλων
+//Λήψη των  υπαλλήλων
 const getAllEmployees = async (req,res) => {
     try {
         const employees = await Employee.findAll({
-            where: {isActive: true}
+            where: {isActive: true},
+            include: [{
+                    model: User,
+                    as: 'user',
+                    attributes: ['id','email', 'phone']
+            }]
         });
         res.status(200).json(employees);
     }
@@ -14,14 +19,20 @@ const getAllEmployees = async (req,res) => {
     }
 };
 
-//Λήψη υπαλλήλων με βάσει το serviceId
+//Λήψη υπαλλήλων ανάλογα το serviceId
 const getEmployeesByService = async (req,res) => {
     try {
         const {serviceId} = req.params;
 
         //Αν Employee.belongsToMany(Service) τοτε
         const service = await Service.findByPk(serviceId, {
-            include: [{ model: Employee, as: 'Employees', where: { isActive: true}, required: false}]
+            include: [{
+                model: Employee,
+                as: 'employees',
+                where: { isActive: true},
+                required: false,
+                through: {attributes: []}
+            }]
         });
 
         if (!service) {
