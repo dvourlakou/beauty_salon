@@ -25,8 +25,8 @@ module.exports = (sequelize) => {
             allowNull: false,
         },
         role: {
-            type: DataTypes.ENUM('CUSTOMER', 'ADMIN', 'EMPLOYEE'),
-            defaultValue: 'CUSTOMER',
+            type: DataTypes.ENUM('USER', 'ADMIN', 'EMPLOYEE'),
+            defaultValue: 'USER',
         },
     }, {
         timestamps: true,
