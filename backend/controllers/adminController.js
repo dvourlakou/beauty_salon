@@ -41,9 +41,9 @@ const getAllAppointments = async (req, res) => {
     try {
         const appointments = await Appointment.findAll({
             include: [
-                { model: User, attributes: ['id', 'name', 'email'] },
-                { model: Employee, attributes: ['id', 'name', 'specialization'] },
-                { model: Service, attributes: ['id', 'name', 'price', 'durationMinutes'] }
+                { model: User,as : 'customer', attributes: ['id', 'name', 'email'] },
+                { model: Employee,as: 'employee', attributes: ['id', 'name', 'specialization'] },
+                { model: Service,as : 'service', attributes: ['id', 'name', 'price', 'durationMinutes'] }
             ],
             order: [['date', 'DESC'], ['time', 'DESC']]
         });
@@ -58,9 +58,9 @@ const getWeeklyAppointments = async (req, res) => {
     try {
         const appointments = await Appointment.findAll({
             include: [
-                { model: User, attributes: ['id', 'name', 'email'] },
-                { model: Employee, attributes: ['id', 'name'] },
-                { model: Service, attributes: ['id', 'name', 'price'] }
+                { model: User, as: 'customer', attributes: ['id', 'name', 'email'] },
+                { model: Employee,as: 'employee', attributes: ['id', 'name'] },
+                { model: Service,as: 'service', attributes: ['id', 'name', 'price'] }
             ],
             order: [['date', 'ASC'], ['time', 'ASC']]
         });
@@ -74,13 +74,13 @@ const getWeeklyAppointments = async (req, res) => {
 const getEmployeeWorkload = async (req, res) => {
     try {
         const employees = await Employee.findAll({
-            include: [{ model: Appointment, as: 'Appointments' }]
+            include: [{ model: Appointment, as: 'appointments' }]
         });
 
         const workload = employees.map(emp => ({
             id: emp.id,
             name: emp.name,
-            appointmentCount: emp.Appointments ? emp.Appointments.length : 0
+            appointmentCount: emp.appointments ? emp.Appointments.length : 0
         }));
         res.status(200).json(workload);
     } catch (error) {

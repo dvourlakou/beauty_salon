@@ -17,7 +17,7 @@ module.exports = (sequelize) => {
         },
         employeeId: {
             type: DataTypes.INTEGER,
-            allowNull: true, // Επιτρέπουμε null αν ο πελάτης δεν διάλεξε συγκεκριμένο αισθητικό
+            allowNull: true,
             references: {
                 model: 'Employees',
                 key: 'id',
