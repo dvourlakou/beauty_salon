@@ -119,7 +119,7 @@ export const BookingPage = () => {
                     serviceName: service.name,
                     date: bookingData.date,
                     time: bookingData.time,
-                    employeeName: createdAppointment?.Employee?.name || employees.find(e => e.id === selectedEmployee)?.name || 'Δεν επιλέχθηκε',
+                    employeeName: createdAppointment?.employee?.name || employees.find(e => e.id === selectedEmployee)?.name || 'Δεν επιλέχθηκε',
                     price: service.price,
                     email: user?.email || 'Δε δηλώθηκε email',
                 }

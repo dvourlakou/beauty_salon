@@ -127,35 +127,35 @@ export const AdminAppointments = () => {
                                         <td className="py-3 px-4">
                                             <div className="font-semibold text-gray-800 flex items-center gap-1">
                                                 <UserIcon size={14} className="text-gray-400" />
-                                                {app.User?.name || '—'}
+                                                {app.customer?.name || '—'}
                                             </div>
-                                            {app.User?.email && (
+                                            {app.customer?.email && (
                                                 <div className="text-xs text-gray-500 flex items-center gap-1 mt-0.5">
                                                     <Mail size={12} className="text-gray-400" />
-                                                    {app.User.email}
+                                                    {app.customer.email}
                                                 </div>
                                             )}
                                         </td>
 
-                                        {/* Υπηρeία */}
+
                                         <td className="py-3 px-4">
                                             <div className="font-medium text-gray-700">
-                                                {app.Service?.name || '—'}
+                                                {app.service?.name || '—'}
                                             </div>
-                                            {app.Service?.price !== undefined && (
+                                            {app.service?.price !== undefined && (
                                                 <div className="text-xs text-gray-500 flex items-center gap-0.5 mt-0.5">
                                                     <DollarSign size={12} className="text-gray-400" />
-                                                    <span>{app.Service.price} €</span>
+                                                    <span>{app.service?.price} €</span>
                                                 </div>
                                             )}
                                         </td>
 
-                                        {/* Αισθητικός  */}
+
                                         <td className="py-3 px-4 text-gray-600">
-                                            {app.Employee?.name || 'Όποιος είναι διαθέσιμος'}
+                                            {app.employee?.name || 'Όποιος είναι διαθέσιμος'}
                                         </td>
 
-                                        {/* Ημερομηνία , Ώρα */}
+
                                         <td className="py-3 px-4">
                                             <div className="flex items-center gap-1 text-gray-700">
                                                 <Calendar size={14} className="text-pink-400" />
@@ -169,12 +169,12 @@ export const AdminAppointments = () => {
                                             )}
                                         </td>
 
-                                        {/* Status */}
+
                                         <td className="py-3 px-4">
                                             {getStatusBadge(app.status)}
                                         </td>
 
-                                        {/* Ενέργειες */}
+
                                         <td className="py-3 px-4 text-right">
                                             <div className="flex items-center justify-end gap-2">
                                                 {app.status !== 'CONFIRMED' && (

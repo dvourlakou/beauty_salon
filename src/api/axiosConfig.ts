@@ -7,7 +7,7 @@ const axiosInstance = axios.create( {
 });
 
 
-//Request interceptor -- add JWT token to every request
+
 
 axiosInstance.interceptors.request.use (
     (config) => {
@@ -21,7 +21,7 @@ axiosInstance.interceptors.request.use (
 
 );
 
-//Response interceptor -- if token expired redirect to login
+
 
 axiosInstance.interceptors.response.use(
     (response) => response,

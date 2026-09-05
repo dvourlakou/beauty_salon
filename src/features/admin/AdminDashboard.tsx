@@ -73,15 +73,15 @@ export const AdminDashboard = () => {
                 </span>
             </div>
 
-            {/* Εμφάνιση Καρτών Στατιστικών */}
+
             {stats && <StatsCards stats={stats} />}
 
-            {/* Εβδομαδιαίο Πρόγραμμα Ραντεβού */}
+
             <div className="mt-6">
                 <WeeklyAppointments appointments={appointments} />
             </div>
 
-            {/* Φόρτος Εργασίας Αισθητικών */}
+
             <div className="mt-6">
                 <EmployeeWorkload workload={workload} />
             </div>

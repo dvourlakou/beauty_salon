@@ -28,9 +28,9 @@ export interface Appointment {
     date: string;
     time: string;
     status: 'PENDING' | 'CONFIRMED' | 'COMPLETED' | 'CANCELLED';
-    User?: User;
-    Employee?: Employee;
-    Service?: Service;
+    customer?: User;
+    employee?: Employee;
+    service?: Service;
 }
 
 export interface EmployeeWorkload {

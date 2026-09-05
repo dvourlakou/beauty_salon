@@ -47,8 +47,8 @@ export const WeeklyAppointments = ({ appointments }: WeeklyAppointmentsProps) =>
                                 <tr key={app.id} className="border-b border-gray-50 hover:bg-gray-50">
                                     <td className="py-3 text-gray-700">{app.date}</td>
                                     <td className="py-3 text-gray-700">{app.time}</td>
-                                    <td className="py-3 font-medium text-gray-800">{app.serviceName}</td>
-                                    <td className="py-3 text-gray-600">{app.employeeName || '-'}</td>
+                                    <td className="py-3 font-medium text-gray-800">{app.service?.name}</td>
+                                    <td className="py-3 text-gray-600">{app.employee?.name || '-'}</td>
                                     <td className="py-3">{getStatusBadge(app.status)}</td>
                                 </tr>
                                 ))}
