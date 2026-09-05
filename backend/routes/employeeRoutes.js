@@ -14,7 +14,7 @@ router.get('/', getAllEmployees);
 
 /**
  * @swagger
- * /api/employees/service/{serviceId}:
+ * /api/employees/services/{serviceId}:
  *   get:
  *     summary: Λήψη υπαλλήλων ανα υπηρεσία
  *
