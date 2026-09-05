@@ -4,7 +4,9 @@ const {ServiceCategory,Service} = require('../models');
 const getAllCategories = async (req,res) => {
     try {
         const categories = await ServiceCategory.findAll({
-            include: [{ model: Service, as: 'Services'}],
+            include: [{
+                model: Service,
+                as: 'services'}],
         });
         res.status(200).json(categories);
     }
@@ -17,7 +19,12 @@ const getAllCategories = async (req,res) => {
 
 const getAllServices = async (req,res) => {
     try {
-        const services = await Service.findAll();
+        const services = await Service.findAll({
+            include: [{
+                model: ServiceCategory,
+                as: 'category'
+            }]
+        });
         res.status(200).json(services);
     }
     catch (error) {
@@ -31,7 +38,12 @@ const getAllServices = async (req,res) => {
 const getServiceById = async (req,res) => {
     try {
         const {id} = req.params;
-        const service = await Service.findByPk(id);
+        const service = await Service.findByPk(id, {
+            include: [{
+                model: ServiceCategory,
+                as: 'category'
+            }]
+        });
         if (!service) {
             return res.status(404).json({message: 'Η υπηρεσία δε βρέθηκε'});
         }
