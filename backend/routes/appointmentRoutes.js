@@ -81,7 +81,7 @@ router.post('/', createAppointment);
  *         description: Απαιτείται σύνδεση
  */
 
-router.get('/my', getMyAppointment);
+router.get('/my', authMiddleware ,getMyAppointment);
 
 /**
  * @swagger

@@ -197,7 +197,7 @@ const seedDatabase = async () => {
             await services[key].addEmployees(waxStaff);
         }
 
-        for (const key of ['fullBodyMassage', 'BackMassage']){
+        for (const key of ['fullBodyMassage', 'backMassage']){
             await services[key].addEmployees(massageStaff);
         }
 

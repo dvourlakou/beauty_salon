@@ -17,12 +17,12 @@ const getAvailableSlots = async (req,res) => {
         //Ποιά ρατεβού είναι ήδη κλεισμένα
         const whereClause = {
                 serviceId,
-                date,
+                date: date,
                 status: { [Op.not] : 'CANCELLED'}
         };
         
         //Αν ο χρήστης επιλέξει συγκεκριμένο υπάλληλο
-        if (employeeId) {
+        if (employeeId && employeeId !== 'null' && employeeId !== 'undefined' && employeeId !== '') {
             whereClause.employeeId = employeeId;
         }
 
@@ -35,7 +35,7 @@ const getAvailableSlots = async (req,res) => {
         //εργαζόμενοι είναι κλεισμένοι τη συγκεκριμένη ώρα
         let bookedTimes = [];
 
-        if (employeeId) {
+        if (employeeId && employeeId !== 'null' && employeeId !== 'undefined' && employeeId !== '') {
             bookedTimes = bookedAppointments.map(app => app.time);
         } else {
             const service = await Service.findByPk(serviceId, {
@@ -71,6 +71,7 @@ const getAvailableSlots = async (req,res) => {
 const createAppointment = async (req,res) => {
     try {
         let {serviceId, employeeId, date, time, notes} = req.body;
+        console.log("Νέο αιτημα κρατησης", {serviceId,employeeId,date,time});
         const customerId = req.user.id;
 
         const service = await Service.findByPk(serviceId, {
@@ -87,66 +88,82 @@ const createAppointment = async (req,res) => {
             return res.status(404).json({message: 'Η υπηρεσία δε βρέθηκε'});
         }
 
+        let assignedEmployees = [];
+        if (service.employees && service.employees.length >0) {
+            assignedEmployees = service.employees;
+            console.log("Βρέθηκαν υπάλληλοι της υπηρεσίας",assignedEmployees.length);
+        } else {
+            console.log("Δε βρέθηκαν διαθέσιμοι υπάλληλοι")
+            assignedEmployees = await Employee.findAll({where: {isActive: true}});
+        }
+
+        console.log(`Ξεκιναω τον έλεγχο για το ${assignedEmployees.length} υπαλλήλους`);
 
         if (!employeeId) {
-            const assignedEmployees = service.employees || await Employee.findAll({where: {isActive: true}});
-
             if (!assignedEmployees || assignedEmployees.length === 0) {
+                console.log("Σφάλμα δε βρέθηκε υπαλληλος για την υπηρεσία");
                 return res.status(400).json({message: 'Δε βρέθηκε διαθέσιμος εργαζόμενος για τη συγκεκριμένη υπηρεσία'});
             }
 
             //Ελέγχω εργαζομένους
             for (const emp of assignedEmployees) {
+                console.log(`Ελέγχω αν ο υπάλληλος ${emp.id} είναι ελεύθερος την ώρα ${time}`);
+
                 const existingApp = await Appointment.findOne({
                     where: {
                         employeeId: emp.id,
-                        date,
-                        time,
+                        date: date,
+                        time: time,
                         status: {[Op.not]: 'CANCELLED'}
                     }
                 });
 
                 if (!existingApp) {
                     employeeId = emp.id;
+                    console.log(`Βρέθηκε ο υπάλληλος ${employeeId}`);
                     break;
                 }
             }
+        } else {
 
-            if (!employeeId) {
-                return res.status(400).json({message: 'Όλοι οι αισθητικοί είναι απασχολημέοι τη συγκεκριμένη ώρα'})
-            } else {
-                const existingAppointment = await Appointment.findOne({
+            console.log(`Ο χρήστης επέλεξε συγκεκριμένο υπάλληλο με ID: ${employeeId} `)
+
+            const existingApp = await Appointment.findOne({
                     where: {
-                        employeeId,
-                        date,
-                        time,
+                        employeeId: employeeId,
+                        date: date,
+                        time: time,
                         status: {[Op.not]: 'CANCELLED'}
                     }
-                });
+            });
 
-                if (existingAppointment) {
-                    return res.status(400).json({message: 'Ο/Η αισθητικός δεν είναι διαθέσιμος/η αυτή την ώρα'});
-                }
+            if (existingApp) {
+                console.log(`Ο υπαλληλος ${employeeId} είναι ήδη απασχολημενος αυτη την ώρα`);
+                return res.status(400).json({message: 'Ο/Η αισθητικός δεν είναι διαθέσιμος/η αυτή την ώρα'});
             }
+            console.log("Ο υπαλληλος είναι ελέυθερος συνεχίζω");
+        }
 
-            const user = await User.findByPk(userId);
+            const user = await User.findByPk(customerId);
+            console.log("Έλεχος χρήστηγ ια κράτηση", user ? `Βρέθηκε ο χρήστης ${user.name}` : 'Δε βρέθηκε ο χρήστης');
 
 
             //Δημιουργία ραντεβού
             const appointment = await Appointment.create({
-                userId,
+                userId: customerId,
                 customerName: user ? user.name : '',
                 customerEmail: user ? user.email : '',
                 phone: user ? user.phone : '',
                 serviceId,
-                employeeId,
-                date,
-                time,
+                employeeId: employeeId,
+                date: date,
+                time: time,
                 durationMinutes: service.durationMinutes || 30,
                 price: service.price,
                 notes,
                 status: 'PENDING',
             });
+            console.log('Το ραντεβου δημιουργήθηκε με επιτυχία στη ΒΔ');
 
             //Φόρτωση των δεδομένων για την απάντηση
             const appointmentWithDetails = await Appointment.findByPk(appointment.id, {
@@ -157,11 +174,13 @@ const createAppointment = async (req,res) => {
                 ]
             });
 
+            console.log("Φορτώθηκαν τα details gia το frontend:", appointmentWithDetails ? 'Επιτυχία' : 'Αποτυχία');
+
             res.status(201).json(appointmentWithDetails);
-        }
+
     }
     catch (error) {
-        console.error(error);
+        console.error("Σφάλμα στο backend (createAppointment ", error);
         res.status(500).json({message:' Παρουσιάστηκε σφάλμα κατά τη δημιουργία του ραντεβού'});
     }
 };
@@ -169,7 +188,7 @@ const createAppointment = async (req,res) => {
 //Λήψη ραντεβού για χρήστη που είναι συνδεδεμένος
 const getMyAppointment = async (req,res) => {
     try {
-        const userId =req.user.id;
+        const userId =req.user.id || 1 ;
         const appointments = await Appointment.findAll({
             where: {userId},
             include: [
@@ -193,7 +212,10 @@ const cancelAppointment = async (req,res) => {
         const customerId = req.user.id;
 
         const appointment = await Appointment.findOne({
-            where: {id,customerId},
+            where: {
+                id: id,
+                userId: customerId
+            },
         });
         if (!appointment) {
             return res.status(400).json({message: 'Το ραντεβού δε βρέθηκε'});

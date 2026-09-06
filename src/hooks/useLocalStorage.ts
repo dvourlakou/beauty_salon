@@ -1,7 +1,7 @@
 import {useState, useEffect} from 'react';
 
 export function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T) => void] {
-    //get from local storage and after that parse
+
 
     const readValue = (): T => {
         if (typeof window === 'undefined') {

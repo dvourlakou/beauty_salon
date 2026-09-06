@@ -91,12 +91,15 @@ export const BookingPage = () => {
 
     //Δημιουργία ραντεβού
     const handleBooking = async () => {
+        console.log("Το κουμπί πατήθηκε. States:" ,{selectedDate, selectedTime,service,submitting});
         if (!selectedDate || !selectedTime || !service) {
             toast.error('Παρακαλώ επιλέξτε την ημερομηνία και ώρα που σας εξυπηρετεί');
             return;
         }
 
         setSubmitting(true);
+
+        console.log("Πέρασε το validation Και ξεκιναει το try");
 
         try {
             const formattedDate = formatDateToLocalString(selectedDate);
@@ -107,8 +110,12 @@ export const BookingPage = () => {
                 employeeId: selectedEmployee || undefined,
             };
 
+            console.log("Ολα καλα, μπορλω να στείλω το POST αίτημα με data:", bookingData);
+
             //Αποστολή αιτήματος στο Api
             const createdAppointment = (await appointmentApi.createBooking(bookingData)) as unknown as Appointment;
+
+            console.log("To API απάντησε με επιτυχία και το αποτέλεσμα είναι:", createdAppointment);
 
             toast.success('Η κράτηση ολοκληρώθηκε με επιτυχία');
 
@@ -127,13 +134,16 @@ export const BookingPage = () => {
 
 
         }
-        catch {
+        catch (error) {
+            console.error("Σφάλμα κατά την κλήση του API στο handleBooking:",error);
             toast.error('Μη επιτυχής κράτηση. Παρακαλώ δοκιμάστε ξανά.');
         }
         finally {
             setSubmitting(false);
         }
     };
+
+
 
     if (loading) {
         return (
@@ -211,7 +221,7 @@ export const BookingPage = () => {
                         service={service}
                         date={selectedDate}
                         time={selectedTime}
-                        employee={employees.find(e => e.id === selectedEmployee)}
+                        employee={employees.find(e => e.id === selectedEmployee) || undefined}
                         />
                 </div>
 

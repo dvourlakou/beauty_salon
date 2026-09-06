@@ -26,7 +26,12 @@ export const appointmentApi = {
     },
 
     createBooking: async (data: BookingDetails): Promise<void> => {
-        await axiosInstance.post('/appointments', data);
+        const token: string | null = localStorage.getItem('token');
+        await axiosInstance.post('/appointments', data, {
+            headers: {
+                Authorization: ` Bearer ${token}`
+            }
+        });
     },
 
     getMyAppointments: async (): Promise<Appointment[]> => {
