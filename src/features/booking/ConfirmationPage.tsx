@@ -109,7 +109,7 @@ export const ConfirmationPage = () => {
                             onClick={() => navigate('/services')}
                             addClasses="w-full bg-pink-300 hover:bg-pink-400 text-white py-3 rounded-xl"/>
                         <button
-                            onClick={() => navigate('/thank-you')}
+                            onClick={() => navigate('/thankyou')}
                             className="text-sm text-pink-400 hover:underline">
                             Ευχαριστούμε
                         </button>
