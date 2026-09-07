@@ -6,6 +6,16 @@ interface WeeklyAppointmentsProps {
 
 export const WeeklyAppointments = ({ appointments }: WeeklyAppointmentsProps) => {
     const getStatusBadge = (status: string) => {
+        let cleanStatus = "RENDING";
+        const rawStatus = String(status).toUpperCase();
+
+        if (rawStatus.includes("PENDING") || rawStatus.includes("ΕΚΚΡΕΜΗ")) cleanStatus = "PENDING";
+        else if (rawStatus.includes("CONFIRMED") || rawStatus.includes("ΕΠΙΒΕΒΑΙΩΜΕΝΑ")) cleanStatus = "CONFIRMED";
+        else if (rawStatus.includes("COMPLETED") || rawStatus.includes("ΟΛΟΚΛΗΡΩΜΕΝΑ")) cleanStatus = "COMPLETED";
+        else if (rawStatus.includes("CANCELLED") || rawStatus.includes("ΑΚΥΡΩΜΕΝΑ")) cleanStatus = "CANCELLED";
+
+
+
         const styles: Record<string, string>= {
             PENDING: 'bg-yellow-100 text-yellow-700',
             CONFIRMED: 'bg-blue-100 text-blue-700',
@@ -21,8 +31,8 @@ export const WeeklyAppointments = ({ appointments }: WeeklyAppointmentsProps) =>
         };
 
         return (
-            <span> className={`px-2 py-1 rounded-full text-xs font-medium ${styles[status] || styles.PENDING}`}
-                {labels[status] || status}
+            <span> className={`px-2 py-1 rounded-full text-xs font-medium ${styles[cleanStatus]}`}
+                {labels[cleanStatus]}
             </span>
         );
     };
@@ -49,7 +59,7 @@ export const WeeklyAppointments = ({ appointments }: WeeklyAppointmentsProps) =>
                                     <td className="py-3 text-gray-700">{app.time}</td>
                                     <td className="py-3 font-medium text-gray-800">{app.service?.name}</td>
                                     <td className="py-3 text-gray-600">{app.employee?.name || '-'}</td>
-                                    <td className="py-3">{getStatusBadge(app.status)}</td>
+                                    <td className="py-3">{getStatusBadge(app.status as string)}</td>
                                 </tr>
                                 ))}
                             </tbody>
