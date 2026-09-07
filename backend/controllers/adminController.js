@@ -151,7 +151,7 @@ const deleteAppointment = async (req, res) => {
 const getAllServices = async (req, res) => {
     try {
         const categories = await ServiceCategory.findAll({
-            include: [{ model: Service, as: 'Services' }]
+            include: [{ model: Service, as: 'services' }]
         });
         res.status(200).json(categories);
     } catch (error) {
