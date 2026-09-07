@@ -1,9 +1,9 @@
 const { User, ServiceCategory, Service, Employee, Appointment } = require('../models');
 const { Op } = require('sequelize');
 
-// ==========================================
+
 // 1. ΣΤΑΤΙΣΤΙΚΑ DASHBOARD & ΡΑΝΤΕΒΟΥ
-// ==========================================
+
 
 const getStats = async (req, res) => {
     try {
@@ -80,7 +80,7 @@ const getEmployeeWorkload = async (req, res) => {
         const workload = employees.map(emp => ({
             id: emp.id,
             name: emp.name,
-            appointmentCount: emp.appointments ? emp.Appointments.length : 0
+            appointmentCount: emp.appointments ? emp.appointments.length : 0
         }));
         res.status(200).json(workload);
     } catch (error) {
