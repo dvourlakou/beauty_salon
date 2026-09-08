@@ -18,7 +18,7 @@ export const AdminLayout = () => {
 
     return (
         <div className="min-h-screen bg-gray-50 flex">
-            {/* sidebar */}
+
             <aside className="w-64 bg-white border-r border-gray-100 p-4 flex flex-col">
                 <h1 className="text-xl font-bold text-pink-300 mb-8">Admin Panel</h1>
 
@@ -41,7 +41,7 @@ export const AdminLayout = () => {
                 </button>
             </aside>
 
-            {/* main content */}
+
             <main className="flex-1 p-6">
                 <Outlet />
             </main>

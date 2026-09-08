@@ -2,20 +2,20 @@ const jwt = require('jsonwebtoken');
 
 const authMiddleware = ( req, res, next) => {
     try {
-        // 1) Παίρνουμε το token από το header Authorization
+        // Παίρνω το token από το header Authorization
         const authHeader  = req.header('Authorization') || req.header('authorization');
         const token = authHeader?.split(' ')[1];
 
-        // 2) Αν δεν υπάρχει token στέλνουμε error
+        // Αν δεν υπάρχει token στέλνω error
         if (!token) {
             return res.status(401).json({message: 'Authentication required'});
         }
 
 
-        // 3) Βάζουμε τα δεδομένα του χρήστη στο req.user
+        // Βάζω τα δεδομένα του χρήστη στο req.user
         req.user = jwt.verify(token, process.env.JWT_SECRET);
 
-        // 4) Συνεχίζουμε στο επόμενο middleware route
+        // Συνεχίζω στο επόμενο middleware route
         next();
     }
     catch (error) {

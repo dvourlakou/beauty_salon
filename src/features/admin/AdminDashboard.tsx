@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import { StatsCards } from './components/StatsCards.tsx';
-import { WeeklyAppointments } from './components/WeeklyAppointments.tsx';
+import { WeeklyAppointments} from './components/WeeklyAppointments.tsx';
 import { EmployeeWorkload } from './components/EmployeeWorkload.tsx';
 import type { DashboardStats, Appointment, EmployeeWorkload as WorkloadType } from './types';
 import LoadingSpinner from '../../shared/ui/LoadingSpinner.tsx';
 import { adminApi } from '../../api/adminApi.ts';
+
 
 export const AdminDashboard = () => {
     const [stats, setStats] = useState<DashboardStats | null>(null);

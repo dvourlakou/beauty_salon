@@ -14,7 +14,7 @@ export const ServiceCard = ({ service, onSelect }: ServiceCardProps) => {
                 {service.description && (
                     <p className="text-sm text-gray-400">{service.description}</p>
                 )}
-                {/* ΜΟΝΟ αν έχω μασάζ, δηλαδή υπάρχει το durationMinutes */}
+
                 {service.durationMinutes && (
                     <span className="text-xs text-gray-400">
                         {service.durationMinutes} λεπτά

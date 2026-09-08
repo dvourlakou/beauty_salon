@@ -2,7 +2,7 @@ const { User, ServiceCategory, Service, Employee, Appointment } = require('../mo
 const { Op } = require('sequelize');
 
 
-// 1. ΣΤΑΤΙΣΤΙΚΑ DASHBOARD & ΡΑΝΤΕΒΟΥ
+// ΣΤΑΤΙΣΤΙΚΑ DASHBOARD & ΡΑΝΤΕΒΟΥ
 
 
 const getStats = async (req, res) => {
@@ -144,9 +144,9 @@ const deleteAppointment = async (req, res) => {
     }
 };
 
-// ==========================================
-// 2. ΔΙΑΧΕΙΡΙΣΗ ΥΠΗΡΕΣΙΩΝ (CRUD)
-// ==========================================
+
+//ΔΙΑΧΕΙΡΙΣΗ ΥΠΗΡΕΣΙΩΝ
+
 
 const getAllServices = async (req, res) => {
     try {
@@ -209,9 +209,9 @@ const deleteService = async (req, res) => {
     }
 };
 
-// ==========================================
-// 3. ΔΙΑΧΕΙΡΙΣΗ ΑΙΣΘΗΤΙΚΩΝ (CRUD)
-// ==========================================
+
+//ΔΙΑΧΕΙΡΙΣΗ ΑΙΣΘΗΤΙΚΩΝ
+
 
 const getAllEmployees = async (req, res) => {
     try {

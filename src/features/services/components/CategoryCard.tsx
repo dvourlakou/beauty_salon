@@ -31,7 +31,7 @@ export const CategoryCard = ({ category, onSelectService }: CategoryCardProps) =
 
     return (
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden transition-all duration-300">
-            {/* Category Header  - clickable to expand-collapse */}
+
             <button
                 onClick={toggleExpand}
                 className="w-full flex items-center justify-between px-6 py-4 hover:bg-gray-50 transition-colors">
@@ -47,7 +47,7 @@ export const CategoryCard = ({ category, onSelectService }: CategoryCardProps) =
                 )}
             </button>
 
-            {/* Category content expanded */}
+
             {isExpanded && (
                 <div className="px-6 pb-4 pt-2 border-t border-gray-100">{category.services && category.services.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">{category.services.map((service) => (

@@ -41,14 +41,14 @@ export const ConfirmationPage = () => {
         <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-12">
             <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 text-center">
 
-                {/* success icon */}
+
                 <div className="flex justify-center mb-4">
                     <div className="bg-green-100 rounded-full p-3">
                         <CheckCircle size={48} className="text-green-500"/>
                     </div>
                 </div>
 
-                {/* title */}
+
                 <h1 className="text-2xl font-bold text-gray-800 mb-2">
                     Κλείστηκε Ραντεβού
                 </h1>
@@ -56,7 +56,7 @@ export const ConfirmationPage = () => {
                     Το ραντεβού σας επιβεβαιώθηκε με επιτυχία
                 </p>
 
-                {/* confirmation details */}
+
                 <div className="bg-gray-50 rounded-xl p-4 mb-6 text-left space-y-3">
                     <div className="flex items-center gap-3">
                         <Calendar size={18} className="text-pink-400"/>
@@ -96,13 +96,13 @@ export const ConfirmationPage = () => {
                         </span>
                     </div>
 
-                    {/* email confirm */}
+
                     <div className="flex items-center justify-center gap-2 text-sm text-gray-400 mb-6">
                         <Mail size={16}/>
                         <span>Στάλθηκε επιβεβαίωση στο <strong>{data.email}</strong></span>
                     </div>
 
-                    {/* action buttons */}
+
                     <div className="space-y-3">
                         <Button
                             label="Επιστροφή πίσω στις υπηρεσίες"

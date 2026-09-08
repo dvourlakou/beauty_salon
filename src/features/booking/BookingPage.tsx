@@ -165,7 +165,7 @@ export const BookingPage = () => {
         <div className="min-h-screen bg-gray-50 px-4 py-6">
             <div className="max-w-2xl mx-auto">
 
-                {/* page header */}
+
                   <div className="flex items-center gap-3 mb-6">
                     <button
                         onClick={() => navigate(-1)}
@@ -175,7 +175,7 @@ export const BookingPage = () => {
                     <h1 className="text-2xl font-bold text-gray-800">Κράτηση Ραντεβού</h1>
                   </div>
 
-                {/* calendar */}
+
                   <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-4">
                     <h2 className="text-lg font-semibold text-gray-700 mb-4">Επιλέξτε Ημερομηνία</h2>
                     <Calendar
@@ -188,7 +188,7 @@ export const BookingPage = () => {
 
                    </div>
 
-                {/* time slots */}
+
                 {selectedDate && (
                   <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-4">
                     <h2 className="text-lg font-semibold text-gray-700 mb-4">Διαθέσιμες Ώρες</h2>
@@ -200,7 +200,7 @@ export const BookingPage = () => {
                   </div>
                 )}
 
-                {/* choose employee */}
+
                 {employees.length > 0 && (
                     <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-4">
                         <h2 className="text-lg font-semibold text-gray-700 mb-4">Επιλογή Αισθητικού</h2>
@@ -215,7 +215,7 @@ export const BookingPage = () => {
                     </div>
                 )}
 
-                {/* booking summary */}
+
                 <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-4">
                     <BookingSummary
                         service={service}
@@ -225,7 +225,7 @@ export const BookingPage = () => {
                         />
                 </div>
 
-                {/* submit button */}
+
                 <button
                     onClick={handleBooking}
                     disabled={!selectedDate || !selectedTime || submitting}

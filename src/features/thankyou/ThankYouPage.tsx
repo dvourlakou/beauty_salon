@@ -23,10 +23,10 @@ import { useNavigate , useLocation } from 'react-router';
      return (
          <div className="min-h-screen flex flex-col items-center justify-center px-4 bg-white">
 
-             {/* κεντρικό μήνυμα */}
+
              <div className="text-center max-w-md">
 
-                 {/* μήνυμα ρυχαριστίας */}
+
                  <h1 className="text-3xl md:text-4xl font-light text-gray-700 mb-4">
                      Σας ευχαριστούμε πολύ
                  </h1>
@@ -35,11 +35,11 @@ import { useNavigate , useLocation } from 'react-router';
                      Beauty Salon
                  </h2>
 
-                 {/* διαχωριστική γραμμή */}
+
                  <div className="w-16 h-1 bg-pink-200 rounded-full mx-auto mb-8"></div>
 
 
-                 {/* κουμπί επιστροφής */}
+
                  <button
                      onClick={() => navigate('/')}
                      className="px-8 py-3 bg-pink-300 text-white rounded-full hover:bg-pink-400 transition-all duration-300 shadow-md hover:shadow-lg">

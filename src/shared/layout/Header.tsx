@@ -13,12 +13,12 @@ const Header = () => {
     return (
         <header className = "bg-cf-dark-gray fixed w-full top-0 left-0 z-50">
             <div className = "container mx-auto px-4 flex items-center justify-between h-16">
-                {/* Logo */}
+
                 <Link  to = "/" className = "text-pink-300 text-xl font-bold tracking-wider">
                     Beauty Salon
                 </Link>
 
-                {/* Navigation */}
+
                 <nav className = "flex items-center gap-6">
                     <Link to = "/services" className = "text-white hover:text-pink-300 transition-colors">
                         Υπηρεσίες
